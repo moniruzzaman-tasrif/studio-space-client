@@ -6,38 +6,36 @@ import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { authClient, signIn, useSession } from "@/lib/auth-client";
+import { signIn } from "@/lib/auth-client";
 
 const GoogleButton = () => {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const { data: session, isPending: isSessionPending } = useSession();
 
-  async function handleGoogleSignUp() {
-    if (isGoogleLoading || isSessionPending) return;
+  async function handleGoogleSignIn() {
+    if (isGoogleLoading) return;
     setIsGoogleLoading(true);
 
     try {
-      const { error } = session
-        ? await authClient.linkSocial({
-            provider: "google",
-            callbackURL: "/",
-          })
-        : await signIn.social({
-            provider: "google",
-            callbackURL: "/",
-          });
+      const result = await signIn.social({
+        provider: "google",
+        callbackURL: "/",
+        errorCallbackURL: "/sign-in",
+      });
 
-      if (error) {
+      if (result.error) {
         toast.error("Google sign-in failed", {
-          description: error.message || "Please try again.",
+          description:
+            result.error.message ?? "Please try again in a moment.",
         });
+        setIsGoogleLoading(false);
       }
     } catch (error) {
       toast.error("Google sign-in failed", {
         description:
-          error instanceof Error ? error.message : "Please try again.",
+          error instanceof Error
+            ? error.message
+            : "Please try again in a moment.",
       });
-    } finally {
       setIsGoogleLoading(false);
     }
   }
@@ -46,8 +44,8 @@ const GoogleButton = () => {
     <Button
       variant="outline"
       type="button"
-      onClick={handleGoogleSignUp}
-      disabled={isGoogleLoading || isSessionPending}
+      onClick={handleGoogleSignIn}
+      disabled={isGoogleLoading}
       className="mb-6 h-10 w-full gap-2 rounded-full border-gray-200 bg-white font-medium text-foreground shadow-sm hover:bg-gray-50"
     >
       {isGoogleLoading ? (
@@ -55,11 +53,7 @@ const GoogleButton = () => {
       ) : (
         <FcGoogle className="h-5 w-5" />
       )}
-      {isGoogleLoading
-        ? "Connecting..."
-        : session
-          ? "Link Google account"
-          : "Continue with Google"}
+      {isGoogleLoading ? "Connecting..." : "Continue with Google"}
     </Button>
   );
 };

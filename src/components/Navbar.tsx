@@ -33,7 +33,6 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { label: "Explore", href: "/explore" },
-  { label: "How It Works", href: "/how-it-works" },
   { label: "About", href: "/about" },
   { label: "Dashboard", href: "/dashboard" },
 ];
@@ -165,7 +164,7 @@ export default function Navbar() {
                     </span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => router.push("/my-studios")}
+                    onClick={() => router.push("/my-listings")}
                     className="cursor-pointer"
                   >
                     <Building2 className="mr-2 h-4 w-4 text-muted-foreground" />
