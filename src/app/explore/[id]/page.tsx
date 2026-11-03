@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import BookingButton from "@/components/shared/BookingButton";
 
 const DetelsPage = async ({
   params,
@@ -265,95 +266,8 @@ const DetelsPage = async ({
               </div>
             </div>
           </div>
-
           {/* Right Column: Sticky Booking Widget */}
-          <div className="lg:col-span-1 sticky top-6">
-            <Card className="rounded-3xl border border-gray-200 bg-white shadow-md overflow-hidden">
-              <CardContent className="p-6 space-y-6">
-                {/* Price Header */}
-                <div className="flex items-baseline justify-between border-b border-gray-100 pb-4">
-                  <div>
-                    <span className="text-2xl font-extrabold text-foreground">
-                      ${hourlyRate}
-                    </span>
-                    <span className="text-xs text-muted-foreground font-medium">
-                      {" "}
-                      / hour
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs font-bold text-foreground">
-                    <Star className="w-3.5 h-3.5 fill-orange-500 text-orange-500" />
-                    <span>{rating}</span>
-                  </div>
-                </div>
-
-                {/* Date & Time Selectors */}
-                <div className="grid grid-cols-2 gap-2 border border-gray-200 rounded-2xl p-3 text-xs bg-[#FAF8F5]">
-                  <div className="space-y-1 p-2 bg-white rounded-xl border border-gray-200">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-                      Date
-                    </span>
-                    <p className="font-semibold text-foreground">
-                      Nov 15, 2026
-                    </p>
-                  </div>
-                  <div className="space-y-1 p-2 bg-white rounded-xl border border-gray-200">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-                      Duration
-                    </span>
-                    <p className="font-semibold text-foreground">4 hours</p>
-                  </div>
-                  <div className="space-y-1 p-2 bg-white rounded-xl border border-gray-200">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-                      Start Time
-                    </span>
-                    <p className="font-semibold text-foreground">10:00 AM</p>
-                  </div>
-                  <div className="space-y-1 p-2 bg-white rounded-xl border border-gray-200">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-                      End Time
-                    </span>
-                    <p className="font-semibold text-foreground">2:00 PM</p>
-                  </div>
-                </div>
-
-                {/* Book Now Action Button */}
-                <Button className="w-full bg-[#E8612C] hover:bg-[#d5521f] text-white font-bold rounded-2xl h-12 shadow-sm text-base">
-                  Book Now
-                </Button>
-
-                {/* Price Calculation Breakdown */}
-                <div className="space-y-3 pt-2 text-xs text-muted-foreground border-t border-gray-100">
-                  <div className="flex justify-between">
-                    <span>${hourlyRate} x 4 hours</span>
-                    <span className="font-semibold text-foreground">
-                      ${hourlyRate * 4}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Service fee</span>
-                    <span className="font-semibold text-foreground">$34</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Security deposit</span>
-                    <span className="font-semibold text-foreground">
-                      ${data.securityDeposit || 70}
-                    </span>
-                  </div>
-                  <div className="flex justify-between pt-3 border-t border-gray-200 text-sm font-extrabold text-foreground">
-                    <span>Total</span>
-                    <span>
-                      ${hourlyRate * 4 + 34 + (data.securityDeposit || 70)}
-                    </span>
-                  </div>
-                </div>
-
-                <p className="text-[11px] text-center text-muted-foreground pt-1">
-                  Free cancellation up to 24 hours before your booking.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+          <BookingButton data={data}></BookingButton>
         </div>
       </div>
     </main>

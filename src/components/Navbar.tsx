@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import {
   Building2,
   CalendarCheck,
@@ -46,8 +47,46 @@ function getShortName(name?: string | null) {
   return parts[0].slice(0, 2).toUpperCase();
 }
 
-export default function Navbar() {
+function NavigationLinks({ pathname }: { pathname: string | null }) {
+  return (
+    <NavigationMenu>
+      <NavigationMenuList className="gap-1">
+        {navItems.map((item) => {
+          const isActive =
+            pathname === item.href || pathname?.startsWith(`${item.href}/`);
+
+          return (
+            <NavigationMenuItem key={item.href}>
+              <Link
+                href={item.href}
+                aria-current={isActive ? "page" : undefined}
+                className={cn(
+                  navigationMenuTriggerStyle(),
+                  "relative bg-transparent text-sm font-medium transition-colors hover:bg-transparent",
+                  isActive
+                    ? "text-[#E8612C] hover:text-[#E8612C]"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {item.label}
+                {isActive && (
+                  <span className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-[#E8612C]" />
+                )}
+              </Link>
+            </NavigationMenuItem>
+          );
+        })}
+      </NavigationMenuList>
+    </NavigationMenu>
+  );
+}
+
+function ActiveNavigationLinks() {
   const pathname = usePathname();
+  return <NavigationLinks pathname={pathname} />;
+}
+
+export default function Navbar() {
   const router = useRouter();
   const { data, isPending } = useSession();
   const user = data?.user;
@@ -73,35 +112,9 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <NavigationMenu>
-          <NavigationMenuList className="gap-1">
-            {navItems.map((item) => {
-              const isActive =
-                pathname === item.href || pathname?.startsWith(`${item.href}/`);
-
-              return (
-                <NavigationMenuItem key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-current={isActive ? "page" : undefined}
-                    className={cn(
-                      navigationMenuTriggerStyle(),
-                      "relative bg-transparent text-sm font-medium transition-colors hover:bg-transparent",
-                      isActive
-                        ? "text-[#E8612C] hover:text-[#E8612C]"
-                        : "text-muted-foreground hover:text-foreground",
-                    )}
-                  >
-                    {item.label}
-                    {isActive && (
-                      <span className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-[#E8612C]" />
-                    )}
-                  </Link>
-                </NavigationMenuItem>
-              );
-            })}
-          </NavigationMenuList>
-        </NavigationMenu>
+        <Suspense fallback={<NavigationLinks pathname={null} />}>
+          <ActiveNavigationLinks />
+        </Suspense>
 
         <div className="flex items-center gap-3">
           {isPending ? (
