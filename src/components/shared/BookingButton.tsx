@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DataType } from "@/itemType";
 import { useSession } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 
 const BookingButton = ({ data }: { data: DataType }) => {
@@ -40,8 +41,8 @@ console.log(DataTime);
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userName:user?.name,
-  userEmail:user?.email,
+        userName: user?.name,
+        userEmail: user?.email,
         bookingData,
         DataTime,
         title,
@@ -49,10 +50,16 @@ console.log(DataTime);
         location,
         imageUrl,
         hourlyRate,
+        status: "Pending",
       }),
     });
     const resData= await res.json();
 
+    if (resData.success) {
+      toast.success(resData.message || "Booking request submitted");
+    } else {
+      toast.error(resData.message || "Booking request failed");
+    }
 
 console.log(resData);
     // console.log("Form Data Object:", bookingData, data);
