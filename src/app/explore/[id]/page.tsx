@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import {
   MapPin,
   Star,
@@ -18,18 +19,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import BookingButton from "@/components/shared/BookingButton";
 
-const DetelsPage = async ({
+const StudioDetails = async ({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ id: string }>;
 }) => {
-  const { slug } = await params;
-
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  const res = await fetch(`http://localhost:5000/studios/${slug}`);
+  const { id } = await params;
+  const res = await fetch(`http://localhost:5000/studios/${id}`);
   const data = await res.json();
   console.log(data);
 
@@ -40,8 +36,7 @@ const DetelsPage = async ({
   const address = data.address || location;
   const hourlyRate = data.hourlyRate || data.pricePerHour || 560;
   const mainImage =
-    data.image ||
-    "https://images.unsplash.com/photo-1783416981880-c4c800834b23";
+    data.imageUrl 
   const gallery =
     data.gallery && data.gallery.length > 0
       ? data.gallery
@@ -274,4 +269,27 @@ const DetelsPage = async ({
   );
 };
 
-export default DetelsPage;
+export default function DetelsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <main
+          aria-busy="true"
+          className="min-h-screen bg-[#FAF8F5] text-foreground"
+        >
+          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-12">
+            <p role="status" className="animate-pulse text-muted-foreground">
+              Loading studio details...
+            </p>
+          </div>
+        </main>
+      }
+    >
+      <StudioDetails params={params} />
+    </Suspense>
+  );
+}

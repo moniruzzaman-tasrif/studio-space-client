@@ -6,17 +6,60 @@ import { Button } from "@base-ui/react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DataType } from "@/itemType";
+import { useSession } from "@/lib/auth-client";
+
 
 const BookingButton = ({ data }: { data: DataType }) => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+ const {data:session,error}= useSession();
+const user = session?.user;
+const userData={
+
+}
+
+const { title, category, location, imageUrl,hourlyRate } = data;
+
+
+
+  const handleSubmit =async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const bookingData = Object.fromEntries(formData.entries());
+    const bookingData = Object.fromEntries(formData.entries()) ;
 
-    console.log("Form Data Object:", bookingData);
+const date= new Date()
+const DataTime={
+  date: date.toDateString(),
+  time:date.toTimeString().split(' ')[0]
+}
+console.log(DataTime);
+
+
+    const res = await fetch("http://localhost:5000/bookings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userName:user?.name,
+  userEmail:user?.email,
+        bookingData,
+        DataTime,
+        title,
+        category,
+        location,
+        imageUrl,
+        hourlyRate,
+      }),
+    });
+    const resData= await res.json();
+
+
+console.log(resData);
+    // console.log("Form Data Object:", bookingData, data);
+
   };
-
-  const hourlyRate = data.hourlyRate || 0;
+console.log(user);
+  const hourlyRates = data.hourlyRate || 0;
   const securityDeposit = data.securityDeposit || 70;
   const serviceFee = 34;
   const duration = 4;
@@ -33,7 +76,7 @@ const BookingButton = ({ data }: { data: DataType }) => {
               <div className="flex items-baseline justify-between border-b border-gray-100 pb-4">
                 <div>
                   <span className="text-2xl font-extrabold text-foreground">
-                    ${hourlyRate}
+                    ${hourlyRates}
                   </span>
                   <span className="text-xs text-muted-foreground font-medium">
                     {" "}
@@ -131,7 +174,7 @@ const BookingButton = ({ data }: { data: DataType }) => {
                       id="hourlyRate"
                       name="hourlyRate"
                       type="number"
-                      defaultValue={hourlyRate}
+                      defaultValue={hourlyRates}
                       className="h-8 text-xs font-semibold"
                     />
                   </div>
@@ -180,7 +223,7 @@ const BookingButton = ({ data }: { data: DataType }) => {
               <div className="space-y-3 pt-2 text-xs text-muted-foreground border-t border-gray-100">
                 <div className="flex justify-between">
                   <span>
-                    ${hourlyRate} x {duration} hours
+                    ${hourlyRates} x {duration} hours
                   </span>
                   <span className="font-semibold text-foreground">
                     ${subtotal}

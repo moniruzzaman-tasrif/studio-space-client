@@ -177,14 +177,14 @@ export default function Navbar() {
                     </span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => router.push("/my-listings")}
+                    onClick={() => router.push(`/my-listings`)}
                     className="cursor-pointer"
                   >
                     <Building2 className="mr-2 h-4 w-4 text-muted-foreground" />
                     <span>My Studio Listings</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => router.push("/my-bookings")}
+                    onClick={() => router.push(`/my-bookings/${user?.email}`)}
                     className="cursor-pointer"
                   >
                     <CalendarCheck className="mr-2 h-4 w-4 text-muted-foreground" />
