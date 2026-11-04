@@ -4,13 +4,13 @@ import StudioCategories from "@/components/home/Categories";
 import FeaturedStudios from "@/components/home/FeaturedStudios";
 import HeroSlider from "@/components/home/Hero";
 import AboutPageHome from "@/components/home/About";
+import Footer from "@/components/home/Footer";
 
 export default function Home() {
   return (
     <div>
       <HeroSlider></HeroSlider>
       <StudioCategories></StudioCategories>
-
       <Suspense
         fallback={
           <section className="mx-auto max-w-7xl px-6 py-12">
@@ -21,6 +21,7 @@ export default function Home() {
         <FeaturedStudios />
       </Suspense>
       <AboutPageHome></AboutPageHome>
+   
     </div>
   );
 }

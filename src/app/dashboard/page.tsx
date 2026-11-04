@@ -511,25 +511,7 @@ export default function DashboardPage() {
         </section>
       </main>
 
-      <footer className="bg-[#25221F] text-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-8 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-10">
-          <Link href="/" className="flex items-center gap-2 font-semibold">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#E8612C]">
-              <Building2 aria-hidden="true" className="h-4 w-4" />
-            </span>
-            StudioSpace
-          </Link>
-          <nav aria-label="Footer navigation" className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/70">
-            <Link href="/about" className="transition-colors hover:text-white">About</Link>
-            <a href="mailto:hello@studiospace.com" className="transition-colors hover:text-white">Help</a>
-            <Link href="/about" className="transition-colors hover:text-white">Privacy</Link>
-            <Link href="/about" className="transition-colors hover:text-white">Terms</Link>
-          </nav>
-          <p className="text-xs text-white/50">
-            © StudioSpace. All rights reserved.
-          </p>
-        </div>
-      </footer>
+  
     </div>
   );
 }

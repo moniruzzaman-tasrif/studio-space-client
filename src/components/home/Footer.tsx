@@ -1,17 +1,20 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-  Instagram,
-  Linkedin,
-  Facebook,
-  Youtube,
   ArrowRight,
   MapPin,
   Mail,
-  Phone,
 } from "lucide-react";
+import {
+  FaFacebook,
+  FaInstagram,
+  FaLinkedin,
+  FaYoutube,
+} from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -57,7 +60,7 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/studios"
+                href="/explore"
                 className="hover:text-[#C47B55] transition-colors"
               >
                 Explore Studios
@@ -198,7 +201,7 @@ export default function Footer() {
             className="hover:text-white transition-colors"
             aria-label="Instagram"
           >
-            <Instagram className="w-4 h-4" />
+            <FaInstagram className="w-4 h-4" />
           </Link>
 
           <Link
@@ -208,7 +211,17 @@ export default function Footer() {
             className="hover:text-white transition-colors"
             aria-label="LinkedIn"
           >
-            <Linkedin className="w-4 h-4" />
+            <FaLinkedin className="w-4 h-4" />
+          </Link>
+
+          <Link
+            href="https://facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white transition-colors"
+            aria-label="Facebook"
+          >
+            <FaFacebook className="w-4 h-4" />
           </Link>
 
           <Link
@@ -218,7 +231,7 @@ export default function Footer() {
             className="hover:text-white transition-colors"
             aria-label="YouTube"
           >
-            <Youtube className="w-4 h-4" />
+            <FaYoutube className="w-4 h-4" />
           </Link>
         </div>
       </div>

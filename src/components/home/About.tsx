@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from "next/image";
-import { Globe2, Heart, ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Globe2, Heart, ShieldCheck } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -24,6 +25,21 @@ const values = [
     icon: Globe2,
   },
 ];
+
+const stats = [
+  { value: "2,500+", label: "Verified Studios" },
+  { value: "12k+", label: "Active Creators" },
+  { value: "50+", label: "Cities Worldwide" },
+  { value: "98%", label: "Satisfaction Rate" },
+];
+
+const team = [
+  { initials: "AR", name: "Alex Rivera", role: "Co-Founder & CEO", color: "bg-[#E8612C]" },
+  { initials: "SK", name: "Sam Kim", role: "Co-Founder & COO", color: "bg-[#25221F]" },
+  { initials: "MP", name: "Maya Patel", role: "Head of Design", color: "bg-[#8A7865]" },
+  { initials: "JC", name: "Jordan Chen", role: "Head of Community", color: "bg-[#E88A63]" },
+];
+
 const AboutPageHome = () => {
   return (
     <div>
@@ -124,6 +140,76 @@ const AboutPageHome = () => {
           </section>
         </div>
       </div>
+
+      <section
+        aria-label="StudioSpace by the numbers"
+        className="bg-[#242424] px-5 py-8 sm:px-8"
+      >
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 text-center sm:grid-cols-4">
+          {stats.map(({ value, label }) => (
+            <div key={label}>
+              <p className="text-2xl font-extrabold text-[#E8612C] sm:text-3xl">
+                {value}
+              </p>
+              <p className="mt-1 text-[10px] font-medium text-gray-300 sm:text-xs">
+                {label}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-[#FAF8F5] px-5 py-14 sm:px-8 sm:py-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 text-center">
+            <h2 className="font-heading text-3xl font-bold text-[#25221F]">
+              Meet the team
+            </h2>
+            <p className="mt-2 text-sm text-[#6D6862]">
+              The people behind StudioSpace
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
+            {team.map(({ initials, name, role, color }) => (
+              <article key={name} className="text-center">
+                <div
+                  aria-hidden="true"
+                  className={`mx-auto flex h-16 w-16 items-center justify-center rounded-full text-sm font-bold text-white ${color}`}
+                >
+                  {initials}
+                </div>
+                <h3 className="mt-3 text-sm font-bold text-[#25221F]">{name}</h3>
+                <p className="mt-1 text-xs text-[#E8612C]">{role}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-4 mb-8 rounded-2xl bg-[#E8612C] px-6 py-10 text-center text-white sm:mx-8 sm:py-12">
+        <h2 className="font-heading text-2xl font-bold">
+          Join our creative community
+        </h2>
+        <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-white/90">
+          Whether you’re looking for a space or sharing one, we’d love to hear
+          from you.
+        </p>
+        <div className="mt-5 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/explore"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-xs font-bold text-[#E8612C] transition-colors hover:bg-orange-50"
+          >
+            Find a Studio <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+          <Link
+            href="/add-studio"
+            className="inline-flex items-center gap-2 rounded-full bg-white/20 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-white/30"
+          >
+            List Your Space <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+      </section>
     </div>
   );
 };
