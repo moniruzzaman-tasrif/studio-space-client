@@ -23,7 +23,6 @@ import {
   Wifi,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -33,6 +32,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useSession } from "@/lib/auth-client";
 import { apiUrl } from "@/lib/utils";
+import { BrandedSpinner } from "@/components/shared/BrandedLoading";
+import { notifyError, notifyInfo, notifySuccess } from "@/lib/notifications";
 
 const categories = [
   { name: "Photo Studio", icon: Camera },
@@ -110,6 +111,7 @@ export default function AddStudioPage() {
     event.preventDefault();
     if (isSubmitting) return;
     if (!user) {
+      notifyInfo("Sign in to publish a studio listing.");
       router.replace("/sign-in?callbackURL=/add-studio");
       return;
     }
@@ -185,9 +187,7 @@ export default function AddStudioPage() {
     setErrors(nextErrors);
     const firstError = Object.values(nextErrors)[0];
     if (firstError) {
-      toast.error("Please check the studio details", {
-        description: firstError,
-      });
+      notifyError("Please check the studio details.", firstError);
       return;
     }
 
@@ -217,19 +217,22 @@ export default function AddStudioPage() {
           router.replace("/sign-in?callbackURL=/add-studio");
           return;
         }
-        toast.error("Unable to publish studio", {
-          description:
-            result.error || "Please check your details and try again.",
-        });
+        notifyError(
+          "Unable to publish studio.",
+          result.error || "Please check your details and try again.",
+        );
         return;
       }
 
-      toast.success("Studio published successfully!");
+      notifySuccess("Studio published successfully!");
       router.push("/my-listings");
-    } catch {
-      toast.error("Unable to publish studio", {
-        description: "A network error occurred. Please try again.",
-      });
+    } catch (error) {
+      notifyError(
+        "Unable to publish studio.",
+        error instanceof Error
+          ? error.message
+          : "A network error occurred. Please try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -237,11 +240,12 @@ export default function AddStudioPage() {
 
   if (isPending || !user) {
     return (
-      <main className="flex min-h-[70vh] items-center justify-center bg-[#FAF8F5]">
-        <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          <LoaderCircle className="h-5 w-5 animate-spin text-[#E8612C]" />
-          {isPending ? "Loading your account..." : "Redirecting to sign in..."}
-        </div>
+      <main className="min-h-[70vh] bg-background">
+        <BrandedSpinner
+          label={
+            isPending ? "Loading your account..." : "Redirecting to sign in..."
+          }
+        />
       </main>
     );
   }

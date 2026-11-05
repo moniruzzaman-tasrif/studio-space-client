@@ -1,21 +1,23 @@
 "use client"
  import React from "react";
 import { Card, CardContent } from "../ui/card";
-import { Star } from "lucide-react";
+import { LoaderCircle, Star } from "lucide-react";
 import { Button } from "@base-ui/react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DataType } from "@/itemType";
 import { useSession } from "@/lib/auth-client";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/lib/utils";
+import { useState } from "react";
+import { notifyError, notifyInfo, notifySuccess } from "@/lib/notifications";
 
 
 const BookingButton = ({ data }: { data: DataType }) => {
  const router = useRouter();
  const {data:session, isPending}= useSession();
 const user = session?.user;
+const [isBooking, setIsBooking] = useState(false);
 
 const { title, category, location, imageUrl,hourlyRate } = data;
 
@@ -23,11 +25,15 @@ const { title, category, location, imageUrl,hourlyRate } = data;
 
   const handleSubmit =async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isBooking) return;
     if (!user) {
+      notifyInfo("Sign in to book this studio.");
       router.push("/sign-in");
       return;
     }
 
+    setIsBooking(true);
+    try {
     const formData = new FormData(e.currentTarget);
     const bookingData = Object.fromEntries(formData.entries()) ;
 
@@ -57,17 +63,25 @@ console.log(DataTime);
         status: "Pending",
       }),
     });
+    if (!res.ok) {
+      throw new Error(`Booking request failed (${res.status}).`);
+    }
     const resData= await res.json();
 
     if (resData.success) {
-      toast.success(resData.message || "Booking request submitted");
+      notifySuccess(resData.message || "Booking request submitted.");
     } else {
-      toast.error(resData.message || "Booking request failed");
+      notifyError(resData.message || "Booking request failed.");
     }
 
-console.log(resData);
-    // console.log("Form Data Object:", bookingData, data);
-
+    } catch (error) {
+      notifyError(
+        "Booking request failed",
+        error instanceof Error ? error.message : "Please try again.",
+      );
+    } finally {
+      setIsBooking(false);
+    }
   };
 console.log(user);
   const hourlyRates = data.hourlyRate || 0;
@@ -226,10 +240,17 @@ console.log(user);
               {/* Book Now Action Button */}
               <Button
                 type="submit"
-                disabled={isPending}
+                disabled={isPending || isBooking}
                 className="w-full bg-[#E8612C] hover:bg-[#d5521f] text-white font-bold rounded-2xl h-12 shadow-sm text-base"
               >
-                Book Now
+                {isBooking ? (
+                  <>
+                    <LoaderCircle aria-hidden="true" className="animate-spin" />
+                    Sending request...
+                  </>
+                ) : (
+                  "Book Now"
+                )}
               </Button>
 
               {/* Price Calculation Breakdown */}

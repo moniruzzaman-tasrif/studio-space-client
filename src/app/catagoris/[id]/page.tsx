@@ -7,6 +7,7 @@ import { MapPin } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import type { DataType } from "@/itemType";
 import { apiUrl } from "@/lib/utils";
+import { BrandedSpinner, StudioGridSkeleton } from "@/components/shared/BrandedLoading";
 
 async function CategoryStudios({
   params,
@@ -76,9 +77,10 @@ export default function CadagoriDynamic({
   return (
     <Suspense
       fallback={
-        <main className="min-h-screen bg-[#FAF8F5] px-6 py-10">
-          <div className="mx-auto max-w-7xl text-sm text-gray-500">
-            Loading studios...
+        <main className="min-h-screen bg-background px-6 py-10">
+          <div className="mx-auto max-w-7xl space-y-6">
+            <BrandedSpinner label="Loading studios..." />
+            <StudioGridSkeleton />
           </div>
         </main>
       }

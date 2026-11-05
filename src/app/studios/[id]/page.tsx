@@ -19,6 +19,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import BookingButton from "@/components/shared/BookingButton";
 import { apiUrl } from "@/lib/utils";
+import { StudioDetailSkeleton } from "@/components/shared/BrandedLoading";
 
 const StudioDetails = async ({
   params,
@@ -277,18 +278,7 @@ export default function DetelsPage({
 }) {
   return (
     <Suspense
-      fallback={
-        <main
-          aria-busy="true"
-          className="min-h-screen bg-[#FAF8F5] text-foreground"
-        >
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-12">
-            <p role="status" className="animate-pulse text-muted-foreground">
-              Loading studio details...
-            </p>
-          </div>
-        </main>
-      }
+      fallback={<StudioDetailSkeleton />}
     >
       <StudioDetails params={params} />
     </Suspense>

@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { LoaderCircle } from "lucide-react";
 import { Button } from "../ui/button";
 import { apiUrl } from "@/lib/utils";
+import { notifyError, notifySuccess } from "@/lib/notifications";
 
 const CancelBtn = ({ statusData }: { statusData: string }) => {
   const router = useRouter();
@@ -25,14 +26,14 @@ const CancelBtn = ({ statusData }: { statusData: string }) => {
       const resData = await res.json();
 
       if (!res.ok || resData.success === false) {
-        toast.error(resData.message || "Could not cancel this booking.");
+        notifyError(resData.message || "Could not cancel this booking.");
         return;
       }
 
-      toast.success(resData.message || "Booking cancelled");
+      notifySuccess(resData.message || "Booking cancelled.");
       router.refresh();
     } catch (error) {
-      toast.error(
+      notifyError(
         error instanceof Error
           ? error.message
           : "Could not cancel this booking.",
@@ -50,7 +51,14 @@ const CancelBtn = ({ statusData }: { statusData: string }) => {
         variant="outline"
         className="h-9 px-4 rounded-xl text-xs font-semibold text-rose-500 border-rose-100 hover:bg-rose-50 hover:text-rose-600"
       >
-        {isCancelling ? "Cancelling..." : "Cancel Booking"}
+        {isCancelling ? (
+          <>
+            <LoaderCircle aria-hidden="true" className="mr-2 h-4 w-4 animate-spin" />
+            Cancelling...
+          </>
+        ) : (
+          "Cancel Booking"
+        )}
       </Button>
     </div>
   );

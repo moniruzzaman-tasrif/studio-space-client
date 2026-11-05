@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
-import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/auth-client";
+import { notifyError } from "@/lib/notifications";
 
 const GoogleButton = () => {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -23,19 +22,19 @@ const GoogleButton = () => {
       });
 
       if (result.error) {
-        toast.error("Google sign-in failed", {
-          description:
-            result.error.message ?? "Please try again in a moment.",
-        });
+        notifyError(
+          "Google sign-in failed.",
+          result.error.message ?? "Please try again in a moment.",
+        );
         setIsGoogleLoading(false);
       }
     } catch (error) {
-      toast.error("Google sign-in failed", {
-        description:
-          error instanceof Error
-            ? error.message
-            : "Please try again in a moment.",
-      });
+      notifyError(
+        "Google sign-in failed.",
+        error instanceof Error
+          ? error.message
+          : "Please try again in a moment.",
+      );
       setIsGoogleLoading(false);
     }
   }

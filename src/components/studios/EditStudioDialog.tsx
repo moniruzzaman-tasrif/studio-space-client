@@ -21,7 +21,6 @@ import {
   Wifi,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -37,6 +36,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { notifyError, notifySuccess } from "@/lib/notifications";
 
 export interface EditableStudio {
   id: string;
@@ -169,7 +169,7 @@ export function EditStudioDialog({
     setErrors(nextErrors);
     const firstError = Object.values(nextErrors)[0];
     if (firstError) {
-      toast.error("Please check the studio details", { description: firstError });
+      notifyError("Please check the studio details.", firstError);
       return;
     }
 
@@ -209,12 +209,12 @@ export function EditStudioDialog({
         amenities: selectedAmenities,
       });
       onOpenChange(false);
-      toast.success("Studio updated successfully");
+      notifySuccess("Studio updated successfully.");
     } catch (error) {
-      toast.error("Unable to update studio", {
-        description:
-          error instanceof Error ? error.message : "Please try again.",
-      });
+      notifyError(
+        "Unable to update studio.",
+        error instanceof Error ? error.message : "Please try again.",
+      );
     } finally {
       setIsSaving(false);
     }

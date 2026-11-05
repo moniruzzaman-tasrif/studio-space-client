@@ -34,6 +34,7 @@ import {
 import { signOut, useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/theme-provider";
+import { notifyError, notifySuccess } from "@/lib/notifications";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -99,10 +100,19 @@ export default function Navbar() {
 
   async function handleLogout() {
     try {
-      await signOut();
+      const { error } = await signOut();
+      if (error) {
+        notifyError("Sign out failed.", error.message ?? "Please try again.");
+        return;
+      }
+
+      notifySuccess("Signed out successfully.");
       router.push("/sign-in");
     } catch (error) {
-      console.error("Logout failed:", error);
+      notifyError(
+        "Sign out failed.",
+        error instanceof Error ? error.message : "Please try again.",
+      );
     }
   }
 

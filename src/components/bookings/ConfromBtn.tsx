@@ -1,9 +1,10 @@
 "use client"
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { LoaderCircle } from "lucide-react";
 import { Button } from '../ui/button';
 import { apiUrl } from "@/lib/utils";
+import { notifyError, notifySuccess } from "@/lib/notifications";
 
 
 const ConfrimBtn =  ({ statusData }: { statusData:string}) => {
@@ -26,15 +27,15 @@ const ConfrimBtn =  ({ statusData }: { statusData:string}) => {
       const resData = await res.json();
 
       if (!res.ok || resData.success === false) {
-        toast.error(resData.message || "Could not confirm this booking.");
+        notifyError(resData.message || "Could not confirm this booking.");
         return;
       }
 
 
-      toast.success(resData.message || "Booking confirmed");
+      notifySuccess(resData.message || "Booking confirmed.");
       router.refresh();
     } catch (error) {
-      toast.error(
+      notifyError(
         error instanceof Error ? error.message : "Could not confirm this booking.",
       );
     } finally {
@@ -48,10 +49,18 @@ const ConfrimBtn =  ({ statusData }: { statusData:string}) => {
     <div>
       <Button
         onClick={handelComfirm}
+        disabled={isConfirming}
         variant="outline"
         className="h-9 px-4 rounded-xl text-xs font-semibold text-emerald-600 border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
       >
-        {isConfirming ? "Confirming...":"Confirm"}
+        {isConfirming ? (
+          <>
+            <LoaderCircle aria-hidden="true" className="mr-2 h-4 w-4 animate-spin" />
+            Confirming...
+          </>
+        ) : (
+          "Confirm"
+        )}
       </Button>
     </div>
   );

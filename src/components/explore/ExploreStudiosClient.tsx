@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { toast } from "sonner";
 import {
   CalendarDays,
   ChevronLeft,
   ChevronRight,
   Heart,
+  LoaderCircle,
   MapPin,
   Search,
   SlidersHorizontal,
@@ -21,6 +21,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { DataType } from "@/itemType";
 import { apiUrl } from "@/lib/utils";
+import { StudioGridSkeleton } from "@/components/shared/BrandedLoading";
+import { notifyError } from "@/lib/notifications";
 
 export type StudioListing = DataType & {
   rating?: number;
@@ -50,7 +52,7 @@ export default function ExploreStudiosClient({
   const [favorites, setFavorites] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [isLoadingCategory, setIsLoadingCategory] = useState(false);
+  const [loadingCategory, setLoadingCategory] = useState<string | null>(null);
 
   const normalizedSearch = searchQuery.trim().toLowerCase();
   const filteredStudios = shownStudios.filter((studio) => {
@@ -80,7 +82,7 @@ export default function ExploreStudiosClient({
       return;
     }
 
-    setIsLoadingCategory(true);
+    setLoadingCategory(category);
     try {
       const response = await fetch(
         apiUrl(`/category/${encodeURIComponent(category)}`),
@@ -96,9 +98,9 @@ export default function ExploreStudiosClient({
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Unable to load this category.";
-      toast.error("Could not load studios", { description: message });
+      notifyError("Could not load studios.", message);
     } finally {
-      setIsLoadingCategory(false);
+      setLoadingCategory(null);
     }
   }
 
@@ -179,7 +181,7 @@ export default function ExploreStudiosClient({
               <button
                 type="button"
                 key={label}
-                disabled={isLoadingCategory}
+                disabled={loadingCategory !== null}
                 onClick={() => void selectCategory(value)}
                 aria-pressed={selectedCategory === value}
                 className={`whitespace-nowrap rounded-full border px-4 py-2 text-xs font-medium transition-all ${
@@ -189,6 +191,12 @@ export default function ExploreStudiosClient({
                 }`}
               >
                 {label}
+                {loadingCategory === value && (
+                  <LoaderCircle
+                    aria-hidden="true"
+                    className="h-3.5 w-3.5 animate-spin text-primary"
+                  />
+                )}
               </button>
             ))}
           </nav>
@@ -204,7 +212,14 @@ export default function ExploreStudiosClient({
           </p>
         </div>
 
-        {filteredStudios.length === 0 ? (
+        {loadingCategory !== null ? (
+          <div className="space-y-4">
+            <p role="status" className="sr-only">
+              Loading studios in the selected category...
+            </p>
+            <StudioGridSkeleton />
+          </div>
+        ) : filteredStudios.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-3xl border border-gray-200 bg-white py-20 text-center">
             <p className="text-lg font-semibold text-foreground">
               No studios found

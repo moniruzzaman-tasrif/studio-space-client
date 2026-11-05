@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import {
   ArrowLeft,
   User,
@@ -25,6 +24,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { signUp } from "@/lib/auth-client";
 import GoogleButton from "@/components/shared/Googlebutton";
+import { notifyError, notifySuccess } from "@/lib/notifications";
 
 /* ---------------------------------- Types --------------------------------- */
 
@@ -119,11 +119,9 @@ export default function RegisterPage() {
     const firstError = Object.values(validationErrors)[0];
     if (firstError) {
       if (validationErrors.password) {
-        toast.error("Invalid Password", { description: validationErrors.password });
+        notifyError("Invalid password.", validationErrors.password);
       } else {
-        toast.error("Please fix the highlighted fields", {
-          description: firstError,
-        });
+        notifyError("Please fix the highlighted fields.", firstError);
       }
       return;
     }
@@ -139,25 +137,26 @@ export default function RegisterPage() {
       });
 
       if (error) {
-        toast.error("Registration Failed", {
-          description:
-            error.message ?? "Something went wrong. Please try again.",
-        });
+        notifyError(
+          "Registration failed.",
+          error.message ?? "Something went wrong. Please try again.",
+        );
         return;
       }
 
-      toast.success("Account created successfully!", {
-        description: "Your account is ready. Redirecting to home...",
-      });
+      notifySuccess(
+        "Account created successfully!",
+        "Your account is ready. Redirecting to home...",
+      );
 
       router.push("/");
     } catch (error) {
-      toast.error("Registration failed", {
-        description:
-          error instanceof Error
-            ? error.message
-            : "Something went wrong. Please try again.",
-      });
+      notifyError(
+        "Registration failed.",
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
+      );
     } finally {
       setIsLoading(false);
     }

@@ -5,6 +5,7 @@ import FeaturedStudios from "@/components/home/FeaturedStudios";
 import HeroSlider from "@/components/home/Hero";
 import AboutPageHome from "@/components/home/About";
 import Footer from "@/components/home/Footer";
+import { BrandedSpinner, StudioGridSkeleton } from "@/components/shared/BrandedLoading";
 
 export default function Home() {
   return (
@@ -13,8 +14,9 @@ export default function Home() {
       <StudioCategories></StudioCategories>
       <Suspense
         fallback={
-          <section className="mx-auto max-w-7xl px-6 py-12">
-            <p className="text-sm text-gray-500">Loading featured studios...</p>
+          <section className="mx-auto max-w-7xl space-y-6 px-6 py-12">
+            <BrandedSpinner label="Loading featured studios..." />
+            <StudioGridSkeleton />
           </section>
         }
       >

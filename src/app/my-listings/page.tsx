@@ -13,7 +13,6 @@ import {
   Star,
   Trash2,
 } from "lucide-react";
-import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,6 +26,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { notifyError, notifySuccess } from "@/lib/notifications";
 import {
   EditStudioDialog,
   type EditableStudio,
@@ -190,7 +190,7 @@ export default function MyListingsPage() {
           ? error.message
           : "Unable to load your studios right now.";
       setLoadError(message);
-      toast.error("Could not load listings", { description: message });
+      notifyError("Could not load listings.", message);
     } finally {
       if (!signal?.aborted) setIsLoading(false);
     }
@@ -256,9 +256,9 @@ export default function MyListingsPage() {
       ),
     );
 
-    toast.success(
+    notifySuccess(
       listing.status === "draft" ? "Studio published successfully" : "Studio reactivated",
-      { description: `"${listing.title}" is now active.` },
+      `"${listing.title}" is now active.`,
     );
   }
 
@@ -281,13 +281,15 @@ export default function MyListingsPage() {
         current.filter((item) => item.id !== listing.id),
       );
       setListingToDelete(null);
-      toast.success("Studio deleted successfully", {
-        description: `"${listing.title}" was removed from your listings.`,
-      });
-    } catch {
-      toast.error("Could not delete studio", {
-        description: "Something went wrong. Please try again.",
-      });
+      notifySuccess(
+        "Studio deleted successfully.",
+        `"${listing.title}" was removed from your listings.`,
+      );
+    } catch (error) {
+      notifyError(
+        "Could not delete studio.",
+        error instanceof Error ? error.message : "Please try again.",
+      );
     } finally {
       setIsDeleting(false);
     }

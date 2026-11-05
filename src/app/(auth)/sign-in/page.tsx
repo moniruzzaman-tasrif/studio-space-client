@@ -13,14 +13,13 @@ import {
   Mail,
   Quote,
 } from "lucide-react";
-import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { signIn } from "@/lib/auth-client";
 import GoogleButton from "@/components/shared/Googlebutton";
+import { notifyError, notifySuccess } from "@/lib/notifications";
 
 type FieldErrors = {
   email?: string;
@@ -65,7 +64,7 @@ export default function SignInPage() {
     setErrors(fieldErrors);
     const firstError = Object.values(fieldErrors)[0];
     if (firstError) {
-      toast.error("Validation Error", { description: firstError });
+      notifyError("Validation error.", firstError);
       return;
     }
 
@@ -78,20 +77,23 @@ export default function SignInPage() {
       });
 
       if (error) {
-        toast.error("Login Failed", {
-          description:
-            error.message ?? "Invalid email or password. Please try again.",
-        });
+        notifyError(
+          "Login failed.",
+          error.message ?? "Invalid email or password. Please try again.",
+        );
         return;
       }
 
-      toast.success("Login successful!", { description: "Welcome back!" });
+      notifySuccess("Login successful!", "Welcome back!");
       router.push("/");
       router.refresh();
-    } catch {
-      toast.error("Login Failed", {
-        description: "Invalid email or password. Please try again.",
-      });
+    } catch (error) {
+      notifyError(
+        "Login failed.",
+        error instanceof Error
+          ? error.message
+          : "Invalid email or password. Please try again.",
+      );
     } finally {
       setIsLoading(false);
     }
