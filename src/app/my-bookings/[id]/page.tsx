@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Calendar, Clock, DollarSign } from "lucide-react";
@@ -45,6 +46,11 @@ const MyBookingPage = async ({
   const res = await fetch(`http://localhost:5000/bookings/${id}`, {
     cache: "no-store",
   });
+  if (res.status === 404) notFound();
+  if (!res.ok) {
+    throw new Error(`The bookings service returned ${res.status}.`);
+  }
+
   const data: BookingItem[] = await res.json();
   console.log(data);
 
