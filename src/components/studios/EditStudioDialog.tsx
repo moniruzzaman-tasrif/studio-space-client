@@ -37,6 +37,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { notifyError, notifySuccess } from "@/lib/notifications";
+import { apiUrl } from "@/lib/utils";
+import { getClientToken } from "@/lib/tokenClint";
 
 export interface EditableStudio {
   id: string;
@@ -175,21 +177,28 @@ export function EditStudioDialog({
 
     setIsSaving(true);
     try {
-      const response = await fetch(`/api/studios/${encodeURIComponent(studio.id)}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          category,
-          description,
-          hourlyRate,
-          securityDeposit,
-          maxCapacity,
-          location,
-          imageUrl,
-          amenities: selectedAmenities,
-        }),
-      });
+      const token = await getClientToken();
+      const response = await fetch(
+        apiUrl(`/studios/${encodeURIComponent(studio.id)}`),
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            title,
+            category,
+            description,
+            hourlyRate,
+            securityDeposit,
+            maxCapacity,
+            location,
+            imageUrl,
+            amenities: selectedAmenities,
+          }),
+        },
+      );
 
       if (!response.ok) {
         const message = await getApiError(response);

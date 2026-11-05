@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { notifyError, notifySuccess } from "@/lib/notifications";
+import { getClientToken } from "@/lib/tokenClint";
 import {
   EditStudioDialog,
   type EditableStudio,
@@ -175,7 +176,11 @@ export default function MyListingsPage() {
 
   const fetchListings = useCallback(async (signal?: AbortSignal) => {
     try {
-      const response = await fetch(STUDIOS_API, { signal });
+      const token = await getClientToken();
+      const response = await fetch(STUDIOS_API, {
+        signal,
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (!response.ok) {
         throw new Error(`The studios API returned ${response.status}.`);
       }
@@ -269,8 +274,10 @@ export default function MyListingsPage() {
     setIsDeleting(true);
 
     try {
+      const token = await getClientToken();
       const response = await fetch(`${STUDIOS_API}/${listing.id}`, {
         method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!response.ok) {
@@ -420,6 +427,16 @@ export default function MyListingsPage() {
               >
                 <Plus className="h-4 w-4" />
                 Add New Studio
+              </Button>
+            )}
+            {listings.length > 0 && (
+              <Button
+                type="button"
+                onClick={() => setFilter("All")}
+                variant="outline"
+                className="mt-5 h-10 rounded-full border-border px-5 font-semibold"
+              >
+                Show all listings
               </Button>
             )}
           </div>

@@ -3,11 +3,13 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin, Calendar, Clock, DollarSign } from "lucide-react";
+import { MapPin, Calendar, Clock, DollarSign, CalendarDays } from "lucide-react";
 
 import ConfrimBtn from "@/components/bookings/ConfromBtn";
 import CancelBtn from "@/components/bookings/cancelBtn";
 import { apiUrl } from "@/lib/utils";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { getServerToken } from "@/lib/tokenServer";
 
 export const instant = false;
 
@@ -44,10 +46,11 @@ const MyBookingPage = async ({
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
-  console.log(id);
+  const token = await getServerToken();
 
   const res = await fetch(apiUrl(`/bookings/${encodeURIComponent(id)}`), {
     cache: "no-store",
+    headers: { Authorization: `Bearer ${token}` },
   });
   if (res.status === 404) notFound();
   if (!res.ok) {
@@ -55,7 +58,6 @@ const MyBookingPage = async ({
   }
 
   const data: BookingItem[] = await res.json();
-  console.log(data);
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] p-6 font-sans">
@@ -97,9 +99,13 @@ const MyBookingPage = async ({
         {/* Bookings List */}
         <div className="space-y-4">
           {!data || data.length === 0 ? (
-            <div className="text-center py-12 text-gray-500 text-sm">
-              No bookings found.
-            </div>
+            <EmptyState
+              icon={CalendarDays}
+              title="No bookings yet"
+              description="Explore studios and book a creative space for your next project."
+              actionLabel="Explore studios"
+              actionHref="/studios"
+            />
           ) : (
             data.map(item => {
               // Default reservation status to "Pending" as per requirement

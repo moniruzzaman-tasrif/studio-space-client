@@ -6,18 +6,23 @@ import { LoaderCircle } from "lucide-react";
 import { Button } from "../ui/button";
 import { apiUrl } from "@/lib/utils";
 import { notifyError, notifySuccess } from "@/lib/notifications";
+import { getClientToken } from "@/lib/tokenClint";
 
 const CancelBtn = ({ statusData }: { statusData: string }) => {
   const router = useRouter();
   const [isCancelling, setIsCancelling] = useState(false);
 
+
   const handleCancelBooking = async () => {
+
     setIsCancelling(true);
     try {
+      const token = await getClientToken();
       const res = await fetch(apiUrl(`/bookings/${encodeURIComponent(statusData)}`), {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           status: "Cancelled",

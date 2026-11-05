@@ -34,6 +34,7 @@ import { useSession } from "@/lib/auth-client";
 import { apiUrl } from "@/lib/utils";
 import { BrandedSpinner } from "@/components/shared/BrandedLoading";
 import { notifyError, notifyInfo, notifySuccess } from "@/lib/notifications";
+import { getClientToken } from "@/lib/tokenClint";
 
 const categories = [
   { name: "Photo Studio", icon: Camera },
@@ -193,9 +194,13 @@ export default function AddStudioPage() {
 
     setIsSubmitting(true);
     try {
+      const token = await getClientToken();
       const response = await fetch(apiUrl("/studios"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           title,
           category: selectedCategory,

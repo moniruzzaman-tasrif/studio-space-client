@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/table";
 import { auth } from "@/lib/auth";
 import { apiUrl } from "@/lib/utils";
+import { getServerToken } from "@/lib/tokenServer";
+import { EmptyState } from "@/components/shared/EmptyState";
 
 export const instant = false;
 
@@ -69,10 +71,15 @@ export default async function DashboardPage() {
   if (!session) redirect("/sign-in?callbackURL=/dashboard");
 
   const email = session.user.email;
+  const token = await getServerToken();
   const [studiosResponse, bookingsResponse] = await Promise.all([
-    fetch(apiUrl("/studios"), { cache: "no-store" }),
+    fetch(apiUrl("/studios"), {
+      cache: "no-store",
+      headers: { Authorization: `Bearer ${token}` },
+    }),
     fetch(apiUrl(`/bookings/${encodeURIComponent(email)}`), {
       cache: "no-store",
+      headers: { Authorization: `Bearer ${token}` },
     }),
   ]);
 
@@ -238,6 +245,17 @@ export default async function DashboardPage() {
                 View all <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
+            {recentBookings.length === 0 ? (
+              <div className="p-5">
+                <EmptyState
+                  icon={CalendarDays}
+                  title="No bookings yet"
+                  description="Explore available studios to find a space for your next creative project."
+                  actionLabel="Explore studios"
+                  actionHref="/studios"
+                />
+              </div>
+            ) : (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -248,8 +266,7 @@ export default async function DashboardPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {recentBookings.length ? (
-                  recentBookings.map((booking) => (
+                {recentBookings.map((booking) => (
                     <TableRow key={booking._id ?? booking.id ?? booking.title}>
                       <TableCell>
                         <p className="font-semibold text-[#25221F]">
@@ -278,16 +295,10 @@ export default async function DashboardPage() {
                         </Badge>
                       </TableCell>
                     </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={4} className="h-28 text-center text-[#8A837C]">
-                      No bookings yet.
-                    </TableCell>
-                  </TableRow>
-                )}
+                  ))}
               </TableBody>
             </Table>
+            )}
           </Card>
         </section>
       </div>

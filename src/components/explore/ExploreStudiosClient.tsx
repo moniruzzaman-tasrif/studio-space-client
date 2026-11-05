@@ -4,12 +4,14 @@ import { useState } from "react";
 import Image from "next/image";
 import {
   CalendarDays,
+  Building2,
   ChevronLeft,
   ChevronRight,
   Heart,
   LoaderCircle,
   MapPin,
   Search,
+  SearchX,
   SlidersHorizontal,
   Star,
 } from "lucide-react";
@@ -23,6 +25,7 @@ import type { DataType } from "@/itemType";
 import { apiUrl } from "@/lib/utils";
 import { StudioGridSkeleton } from "@/components/shared/BrandedLoading";
 import { notifyError } from "@/lib/notifications";
+import { EmptyState } from "@/components/shared/EmptyState";
 
 export type StudioListing = DataType & {
   rating?: number;
@@ -112,6 +115,13 @@ export default function ExploreStudiosClient({
     );
   }
 
+  function clearSearchFilters() {
+    setSearchQuery("");
+    setShownStudios(studios);
+    setSelectedCategory("");
+    setCurrentPage(1);
+  }
+
   return (
     <main className="min-h-screen bg-[#FAF8F5] px-4 py-8 sm:px-6 lg:px-12">
       <div className="mx-auto max-w-7xl space-y-8">
@@ -121,7 +131,7 @@ export default function ExploreStudiosClient({
           </h1>
 
           <form
-
+            onSubmit={(event) => event.preventDefault()}
             className="flex flex-col items-center gap-3 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm md:flex-row"
           >
             <div className="relative w-full flex-1">
@@ -220,14 +230,32 @@ export default function ExploreStudiosClient({
             <StudioGridSkeleton />
           </div>
         ) : filteredStudios.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-3xl border border-gray-200 bg-white py-20 text-center">
-            <p className="text-lg font-semibold text-foreground">
-              No studios found
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Try adjusting your search criteria or category filter.
-            </p>
-          </div>
+          <EmptyState
+            icon={studios.length === 0 ? Building2 : SearchX}
+            title={
+              studios.length === 0
+                ? "No studios available yet"
+                : shownStudios.length === 0
+                ? "No studios available in this category"
+                : "No matching studios"
+            }
+            description={
+              studios.length === 0
+                ? "Be the first to share a creative space with the StudioSpace community."
+                : shownStudios.length === 0
+                ? "Try browsing all studios to find a creative space for your project."
+                : "Try another search or clear your filters to see more studios."
+            }
+            actionLabel={
+              studios.length === 0
+                ? "List your studio"
+                : shownStudios.length === 0
+                  ? "Browse all studios"
+                  : "Clear filters"
+            }
+            actionHref={studios.length === 0 ? "/add-studio" : undefined}
+            onAction={clearSearchFilters}
+          />
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {visibleStudios.map((studio) => {

@@ -9,6 +9,7 @@ import { DataType } from "@/itemType";
 import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/lib/utils";
+import { getClientToken } from "@/lib/tokenClint";
 import { useState } from "react";
 import { notifyError, notifyInfo, notifySuccess } from "@/lib/notifications";
 
@@ -34,45 +35,44 @@ const { title, category, location, imageUrl,hourlyRate } = data;
 
     setIsBooking(true);
     try {
-    const formData = new FormData(e.currentTarget);
-    const bookingData = Object.fromEntries(formData.entries()) ;
+      const token = await getClientToken();
+      const formData = new FormData(e.currentTarget);
+      const bookingData = Object.fromEntries(formData.entries());
+      const date = new Date();
+      const dataTime = {
+        date: date.toDateString(),
+        time: date.toTimeString().split(" ")[0],
+      };
 
-const date= new Date()
-const DataTime={
-  date: date.toDateString(),
-  time:date.toTimeString().split(' ')[0]
-}
-console.log(DataTime);
+      const res = await fetch(apiUrl("/bookings"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          userName: user.name,
+          userEmail: user.email,
+          bookingData,
+          DataTime: dataTime,
+          title,
+          category,
+          location,
+          imageUrl,
+          hourlyRate,
+          status: "Pending",
+        }),
+      });
+      if (!res.ok) {
+        throw new Error(`Booking request failed (${res.status}).`);
+      }
+      const resData = await res.json();
 
-
-    const res = await fetch(apiUrl("/bookings"), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userName: user.name,
-        userEmail: user.email,
-        bookingData,
-        DataTime,
-        title,
-        category,
-        location,
-        imageUrl,
-        hourlyRate,
-        status: "Pending",
-      }),
-    });
-    if (!res.ok) {
-      throw new Error(`Booking request failed (${res.status}).`);
-    }
-    const resData= await res.json();
-
-    if (resData.success) {
-      notifySuccess(resData.message || "Booking request submitted.");
-    } else {
-      notifyError(resData.message || "Booking request failed.");
-    }
+      if (resData.success) {
+        notifySuccess(resData.message || "Booking request submitted.");
+      } else {
+        notifyError(resData.message || "Booking request failed.");
+      }
 
     } catch (error) {
       notifyError(
@@ -83,7 +83,6 @@ console.log(DataTime);
       setIsBooking(false);
     }
   };
-console.log(user);
   const hourlyRates = data.hourlyRate || 0;
   const securityDeposit = data.securityDeposit || 70;
   const serviceFee = 34;
