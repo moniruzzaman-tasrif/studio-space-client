@@ -8,15 +8,13 @@ import { Label } from "@/components/ui/label";
 import { DataType } from "@/itemType";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 const BookingButton = ({ data }: { data: DataType }) => {
-
- const {data:session,error}= useSession();
+ const router = useRouter();
+ const {data:session, isPending}= useSession();
 const user = session?.user;
-const userData={
-
-}
 
 const { title, category, location, imageUrl,hourlyRate } = data;
 
@@ -24,6 +22,11 @@ const { title, category, location, imageUrl,hourlyRate } = data;
 
   const handleSubmit =async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!user) {
+      router.push("/sign-in");
+      return;
+    }
+
     const formData = new FormData(e.currentTarget);
     const bookingData = Object.fromEntries(formData.entries()) ;
 
@@ -41,8 +44,8 @@ console.log(DataTime);
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userName: user?.name,
-        userEmail: user?.email,
+        userName: user.name,
+        userEmail: user.email,
         bookingData,
         DataTime,
         title,
@@ -78,6 +81,7 @@ console.log(user);
       <div className="lg:col-span-1 sticky top-6">
         <Card className="rounded-3xl border border-gray-200 bg-white shadow-md overflow-hidden">
           <CardContent className="p-6 space-y-6">
+
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Header Info */}
               <div className="flex items-baseline justify-between border-b border-gray-100 pb-4">
@@ -221,6 +225,7 @@ console.log(user);
               {/* Book Now Action Button */}
               <Button
                 type="submit"
+                disabled={isPending}
                 className="w-full bg-[#E8612C] hover:bg-[#d5521f] text-white font-bold rounded-2xl h-12 shadow-sm text-base"
               >
                 Book Now

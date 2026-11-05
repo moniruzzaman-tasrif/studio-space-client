@@ -113,17 +113,6 @@ export default function RegisterPage() {
     // Native FormData extraction
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData.entries()) as FormValues;
-    console.log(data)
-
-
-    const { data: resData, error, } = await signUp.email({
-      name: data.name,
-      email: data.email,
-      image: data.photoUrl,
-      password: data.password,
-    });
-
-   console.log(resData,error);
     const validationErrors = validate(data);
     setErrors(validationErrors);
 
@@ -133,7 +122,7 @@ export default function RegisterPage() {
         toast.error("Invalid Password", { description: validationErrors.password });
       } else {
         toast.error("Please fix the highlighted fields", {
-          // description: firstError,
+          description: firstError,
         });
       }
       return;
@@ -141,6 +130,14 @@ export default function RegisterPage() {
 
     setIsLoading(true);
     try {
+      const { error } = await signUp.email({
+        name: data.name,
+        email: data.email,
+        image: data.photoUrl,
+        password: data.password,
+        callbackURL: "/",
+      });
+
       if (error) {
         toast.error("Registration Failed", {
           description:
@@ -150,13 +147,16 @@ export default function RegisterPage() {
       }
 
       toast.success("Account created successfully!", {
-        description: `Welcome to StudioSpace, ${resData.user.name}! Redirecting to login...`,
+        description: "Your account is ready. Redirecting to home...",
       });
 
-      router.push("/sign-in");
-    } catch {
+      router.push("/");
+    } catch (error) {
       toast.error("Registration failed", {
-        description: "Something went wrong. Please try again.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong. Please try again.",
       });
     } finally {
       setIsLoading(false);

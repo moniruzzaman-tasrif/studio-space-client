@@ -33,10 +33,11 @@ import { signOut, useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  {label:"Home",href:"/"},
-  { label: "Explore", href: "/explore" },
+  { label: "Home", href: "/" },
+  { label: "Explore Studios ", href: "/studios" },
+  { label: "How it Work", href: "/How-It-Works" },
   { label: "About", href: "/about" },
-  { label: "Dashboard", href: "/dashboard" },
+  
 ];
 
 function getShortName(name?: string | null) {

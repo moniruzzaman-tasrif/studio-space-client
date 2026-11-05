@@ -118,7 +118,7 @@ export default function ExploreStudiosClient({
           </h1>
 
           <form
-          
+
             className="flex flex-col items-center gap-3 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm md:flex-row"
           >
             <div className="relative w-full flex-1">
@@ -336,7 +336,7 @@ export default function ExploreStudiosClient({
                           </p>
                         )}
                       </div>
-                      <Link href={`explore/${studio._id}`}>
+                      <Link href={`studios/${studio._id}`}>
                         <Button
                           type="button"
                           size="sm"

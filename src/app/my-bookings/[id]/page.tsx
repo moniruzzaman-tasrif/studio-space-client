@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Calendar, Clock, DollarSign } from "lucide-react";
 
 import ConfrimBtn from "@/components/bookings/ConfromBtn";
+import CancelBtn from "@/components/bookings/cancelBtn";
 
 // Interface matching your exact API response item
 interface BookingItem {
@@ -77,7 +78,7 @@ const MyBookingPage = async ({
             )
           </button>
           <button className="px-4 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50">
-            Completed ({data.filter(b => b.status === "Completed").length})
+            Confirmed ({data.filter(b => b.status === "Confirmed").length})
           </button>
           <button className="px-4 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-600 border border-gray-200 hover:bg-gray-50">
             Cancelled ({data.filter(b => b.status === "Cancelled").length})
@@ -160,7 +161,7 @@ const MyBookingPage = async ({
                         {status === "Completed" && (
                           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-600 border border-blue-100">
                             <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>{" "}
-                            Completed
+                            Confirmed
                           </span>
                         )}
                         {status === "Cancelled" && (
@@ -210,18 +211,15 @@ const MyBookingPage = async ({
                       </Button>
 
                       {/* Confirm Button added for Pending status */}
-                      {status === "Pending" && <ConfrimBtn statusData={item._id}></ConfrimBtn> }
-
                       {status === "Pending" && (
-                        <Button
-                          variant="outline"
-                          className="h-9 px-4 rounded-xl text-xs font-semibold text-rose-500 border-rose-100 hover:bg-rose-50 hover:text-rose-600"
-                        >
-                          Cancel Booking
-                        </Button>
+                        <ConfrimBtn statusData={item._id}></ConfrimBtn>
                       )}
 
-                      {(status === "Completed" || status === "Cancelled") && (
+                      {status === "Pending" && (
+                        <CancelBtn statusData={item._id}></CancelBtn>
+                      )}
+
+                      {(status === "Confirmed" || status === "Cancelled") && (
                         <Button
                           variant="outline"
                           className="h-9 px-4 rounded-xl text-xs font-semibold text-[#E8612C] border-[#E8612C]/20 hover:bg-[#E8612C]/5"

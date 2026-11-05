@@ -2,20 +2,25 @@ import Link from "next/link";
 import {
   ArrowDown,
   ArrowRight,
+  BadgeCheck,
   CalendarCheck,
+  CalendarDays,
   Check,
   CircleHelp,
   ClipboardList,
   CreditCard,
   DollarSign,
+  Headset,
   Search,
+  ShieldCheck,
   Sparkles,
+  Wrench,
 } from "lucide-react";
 
 const guestSteps = [
   {
     number: "01",
-    title: "Search & Discover",
+    title: "Discover Spaces",
     description:
       "Browse studios by location, type, price, and amenities to find the right space.",
     icon: Search,
@@ -23,19 +28,54 @@ const guestSteps = [
   },
   {
     number: "02",
-    title: "Book Instantly",
+    title: "Select Shoot Hours",
     description:
-      "Choose your date and time, review the total cost, and send your reservation request.",
-    icon: CalendarCheck,
-    points: ["Instant confirmation", "Secure payments", "Free cancellation"],
+      "Choose the date and hours that fit your production schedule.",
+    icon: CalendarDays,
+    points: ["Pick your date", "Choose your hours", "Review availability"],
   },
   {
     number: "03",
-    title: "Create Magic",
+    title: "Book Instantly",
     description:
-      "Show up to your booked studio, meet the host, and bring your creative idea to life.",
+      "Review the booking details and total cost, then submit your reservation.",
+    icon: CalendarCheck,
+    points: ["Clear pricing", "Secure checkout", "Booking confirmation"],
+  },
+  {
+    number: "04",
+    title: "Create & Produce",
+    description:
+      "Arrive at your studio and bring your creative project to life.",
     icon: Sparkles,
     points: ["Professional equipment", "Host support", "Leave a review"],
+  },
+];
+
+const creatorAssurances = [
+  {
+    title: "Liability Protection",
+    description:
+      "Eligible bookings include liability protection. Review the booking terms for coverage details.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Verified Profiles",
+    description:
+      "Profile verification helps creators and hosts know who they are working with.",
+    icon: BadgeCheck,
+  },
+  {
+    title: "Equipment Safety",
+    description:
+      "Studio equipment details and host instructions help you plan a safe production.",
+    icon: Wrench,
+  },
+  {
+    title: "24/7 Host Support",
+    description:
+      "Reach out for help with your booking and studio questions whenever you need it.",
+    icon: Headset,
   },
 ];
 
@@ -116,7 +156,7 @@ export default function HowItWorksPage() {
           </h2>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {guestSteps.map(({ number, title, description, icon: Icon, points }) => (
             <article
               key={number}
@@ -144,6 +184,36 @@ export default function HowItWorksPage() {
               </ul>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="bg-white px-6 py-14 sm:py-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="mx-auto mb-8 max-w-2xl text-center">
+            <h2 className="text-3xl font-serif font-bold">
+              Host Guarantee & Creator Support
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-gray-500">
+              Support and safeguards to help creators book and work with
+              confidence.
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {creatorAssurances.map(({ title, description, icon: Icon }) => (
+              <article
+                key={title}
+                className="rounded-2xl border border-gray-100 bg-[#FAF8F5] p-5"
+              >
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-100 text-[#E8612C]">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <h3 className="mt-4 text-sm font-bold">{title}</h3>
+                <p className="mt-2 text-xs leading-5 text-gray-500">
+                  {description}
+                </p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 

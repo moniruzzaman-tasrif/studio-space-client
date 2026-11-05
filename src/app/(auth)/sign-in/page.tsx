@@ -49,7 +49,6 @@ export default function SignInPage() {
     const formData = new FormData(event.currentTarget);
 
     const data = Object.fromEntries(formData.entries()) as typeValue;
-    console.log(data);
 
     const fieldErrors: FieldErrors = {};
 
@@ -72,13 +71,11 @@ export default function SignInPage() {
 
     setIsLoading(true);
     try {
-      const { data: resData, error } = await signIn.email({
+      const { error } = await signIn.email({
         email: data.email,
         password: data.password,
-        callbackURL: "/dashboard",
+        callbackURL: "/",
       });
-
-      console.log(resData, error);
 
       if (error) {
         toast.error("Login Failed", {
