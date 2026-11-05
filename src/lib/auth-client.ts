@@ -4,8 +4,7 @@ export const authClient = createAuthClient({
     plugins: [
     jwtClient()
   ],
-  /** The base URL of the server (optional if you're using the same domain) */
-  baseURL: process.env.BETTER_AUTH_URL,
+  // No baseURL needed — the auth API is on the same domain (/api/auth/[...all])
 });
 
 export const { signIn, signUp, signOut, useSession } = authClient;
