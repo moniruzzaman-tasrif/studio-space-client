@@ -97,9 +97,9 @@ const { title, category, location, imageUrl, hourlyRate } = data;
 
   return (
     <div>
-      <div className="lg:col-span-1 sticky top-6">
+      <div className="lg:col-span-1 lg:sticky lg:top-6">
         <Card className="rounded-3xl border border-gray-200 bg-white shadow-md overflow-hidden">
-          <CardContent className="p-6 space-y-6">
+          <CardContent className="space-y-5 p-4 sm:space-y-6 sm:p-6">
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Header Info */}

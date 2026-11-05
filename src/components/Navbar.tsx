@@ -1,12 +1,13 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import {
   Building2,
   CalendarCheck,
   ChevronDown,
   LayoutDashboard,
   LogOut,
+  Menu,
   PlusCircle,
   Moon,
   Sun,
@@ -31,6 +32,13 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { signOut, useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/theme-provider";
@@ -90,6 +98,7 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const { data, isPending } = useSession();
   const user = data?.user;
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   async function handleLogout() {
     try {
@@ -111,21 +120,23 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-      <div className="container mx-auto flex h-16 items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-2.5">
+      <div className="container mx-auto flex h-14 items-center justify-between gap-2 px-3 sm:h-16 sm:px-6">
+        <Link href="/" className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-2.5">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
             <LuBox className="h-5 w-5" />
           </span>
-          <span className="text-lg font-bold tracking-tight text-foreground">
+          <span className="text-base font-bold tracking-tight text-foreground sm:text-lg">
             StudioSpace
           </span>
         </Link>
 
-        <Suspense fallback={<NavigationLinks pathname={null} />}>
-          <ActiveNavigationLinks />
-        </Suspense>
+        <div className="hidden xl:block">
+          <Suspense fallback={<NavigationLinks pathname={null} />}>
+            <ActiveNavigationLinks />
+          </Suspense>
+        </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
           <button
             type="button"
             onClick={toggleTheme}
@@ -143,7 +154,7 @@ export default function Navbar() {
           {isPending ? (
             <div
               aria-hidden="true"
-              className="h-10 w-36 animate-pulse rounded-full bg-muted"
+              className="h-10 w-9 animate-pulse rounded-full bg-muted sm:w-36"
             />
           ) : user ? (
             <DropdownMenu>
@@ -159,7 +170,7 @@ export default function Navbar() {
                     {getShortName(user.name)}
                   </AvatarFallback>
                 </Avatar>
-                <span className="max-w-[130px] truncate text-sm font-semibold text-foreground">
+                <span className="hidden max-w-[130px] truncate text-sm font-semibold text-foreground sm:inline">
                   {user.name || "User"}
                 </span>
                 <ChevronDown
@@ -234,18 +245,91 @@ export default function Navbar() {
             <>
               <Link
                 href="/sign-in"
-                className="inline-flex h-9 items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-accent-foreground"
+                className="hidden h-9 items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-accent-foreground xl:inline-flex"
               >
                 Log in
               </Link>
               <Link
                 href="/sign-up"
-                className="inline-flex h-9 items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
+                className="hidden h-9 items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90 xl:inline-flex"
               >
                 Sign up
               </Link>
             </>
           )}
+          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+            <SheetTrigger
+              aria-label="Open navigation menu"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary xl:hidden"
+            >
+              <Menu aria-hidden="true" className="h-4 w-4" />
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[min(20rem,85vw)]">
+              <SheetHeader>
+                <SheetTitle>StudioSpace</SheetTitle>
+              </SheetHeader>
+              <nav aria-label="Mobile navigation" className="flex flex-col gap-1 px-4">
+                {NAV_ITEMS.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="rounded-lg px-3 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                {user ? (
+                  <>
+                    <div className="my-2 border-t border-border" />
+                    {[
+                      ["Dashboard", "/dashboard"],
+                      ["Add New Studio", "/add-studio"],
+                      ["My Studio Listings", "/my-listings"],
+                      ["My Bookings", `/my-bookings/${encodeURIComponent(user.email)}`],
+                    ].map(([label, href]) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="rounded-lg px-3 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                      >
+                        {label}
+                      </Link>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        void handleLogout();
+                      }}
+                      className="rounded-lg px-3 py-3 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+                    >
+                      Log out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className="my-2 border-t border-border" />
+                    <Link
+                      href="/sign-in"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="rounded-lg px-3 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                    >
+                      Log in
+                    </Link>
+                    <Link
+                      href="/sign-up"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="rounded-lg bg-primary px-3 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+                    >
+                      Sign up
+                    </Link>
+                  </>
+                )}
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>

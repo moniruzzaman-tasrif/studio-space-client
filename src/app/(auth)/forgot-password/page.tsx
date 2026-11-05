@@ -8,9 +8,9 @@ import { Label } from "@/components/ui/label";
 
 export default function ForgotPasswordPage() {
   return (
-    <main className="flex min-h-screen w-full items-center justify-center bg-[#FAF8F5] p-4 md:p-8">
-      <div className="grid w-full max-w-6xl grid-cols-1 items-center gap-8 lg:grid-cols-12">
-        <section className="px-4 py-6 sm:px-8 lg:col-span-6">
+    <main className="flex min-h-[calc(100svh-4rem)] w-full items-center justify-center bg-[#FAF8F5] px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+      <div className="grid w-full max-w-6xl grid-cols-1 items-center gap-8 xl:grid-cols-12 xl:gap-10">
+        <section className="mx-auto w-full max-w-md min-w-0 py-2 sm:py-6 xl:col-span-6 xl:max-w-none xl:px-8">
           <Link
             href="/sign-in"
             className="mb-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
@@ -26,7 +26,7 @@ export default function ForgotPasswordPage() {
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-100 text-[#E8612C]">
               <LockKeyhole className="h-6 w-6" aria-hidden="true" />
             </div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
+            <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
               Forgot your password?
             </h1>
             <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
@@ -82,7 +82,7 @@ export default function ForgotPasswordPage() {
           </p>
         </section>
 
-        <div className="hidden lg:col-span-6 lg:block">
+        <div className="hidden min-w-0 xl:col-span-6 xl:block">
           <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border border-gray-100 bg-gray-900 shadow-2xl">
             <Image
               src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1200&auto=format&fit=crop"

@@ -38,7 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ThemeProvider>
           <Navbar></Navbar>
         </ThemeProvider>
-        <main> {children} </main>
+        <main className="min-w-0 flex-1">{children}</main>
         <Footer></Footer>
         <Toaster position="top-right" richColors />
       </body>

@@ -6,7 +6,7 @@ const client = new MongoClient(process.env.MONGODB_URL as string);
 export const db = client.db("StudioSpace");
 
 export const auth = betterAuth({
-  baseURL: process.env.BETTER_AUTH_URL,
+  baseURL: process.env.BETTER_AUTH_URL ? process.env.BETTER_AUTH_URL.replace(/\/+$/, "") : undefined,
   secret: process.env.BETTER_AUTH_SECRET,
     plugins: [
         jwt(),

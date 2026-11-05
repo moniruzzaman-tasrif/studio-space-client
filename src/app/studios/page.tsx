@@ -12,30 +12,30 @@ const KNOWN_CATEGORIES = CATEGORY_FILTERS.map(({ value }) => value).filter(
 );
 
 async function ExploreStudios({ category }: { category: string }) {
-  const allStudios = fetch(apiUrl("/studios"), { cache: "no-store" }).then(
-    (response) => {
-      if (!response.ok) {
-        throw new Error(`The studios API returned ${response.status}.`);
-      }
-      return response.json() as Promise<StudioListing[]>;
-    },
-  );
+  let studios: StudioListing[] = [];
+  let categoryStudiosList: StudioListing[] | null = null;
 
-  const categoryStudios = category
-    ? fetch(apiUrl(`/category/${encodeURIComponent(category)}`), {
+  try {
+    const res = await fetch(apiUrl("/studios"), { cache: "no-store" });
+    if (res.ok) {
+      studios = await res.json();
+    }
+  } catch (err) {
+    console.error("Failed to fetch all studios:", err);
+  }
+
+  if (category) {
+    try {
+      const catRes = await fetch(apiUrl(`/category/${encodeURIComponent(category)}`), {
         cache: "no-store",
-      }).then((response) => {
-        if (!response.ok) {
-          throw new Error(`The studios API returned ${response.status}.`);
-        }
-        return response.json() as Promise<StudioListing[]>;
-      })
-    : null;
-
-  const [studios, categoryStudiosList] = await Promise.all([
-    allStudios,
-    categoryStudios,
-  ]);
+      });
+      if (catRes.ok) {
+        categoryStudiosList = await catRes.json();
+      }
+    } catch (err) {
+      console.error("Failed to fetch category studios:", err);
+    }
+  }
 
   return (
     <ExploreStudiosClient

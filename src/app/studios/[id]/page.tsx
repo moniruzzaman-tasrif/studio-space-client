@@ -223,7 +223,7 @@ const StudioDetails = async ({
                 <div className="h-14 w-14 rounded-full bg-[#E8612C] text-white flex items-center justify-center text-lg font-bold shadow-md shrink-0">
                   {ownerName.slice(0, 2).toUpperCase()}
                 </div>
-                <div className="space-y-1">
+                <div className="min-w-0 space-y-1">
                   <h3 className="font-bold text-base text-foreground">
                     {ownerName}
                   </h3>
@@ -231,7 +231,7 @@ const StudioDetails = async ({
                     Superhost since 2022 • Verified Host
                   </p>
                   {ownerEmail && (
-                    <p className="text-xs font-medium text-emerald-600 flex items-center gap-1 pt-0.5">
+                    <p className="break-all text-xs font-medium text-emerald-600 flex items-center gap-1 pt-0.5">
                       <ShieldCheck className="w-3.5 h-3.5" /> {ownerEmail}
                     </p>
                   )}

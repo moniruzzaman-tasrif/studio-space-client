@@ -165,10 +165,10 @@ export default function RegisterPage() {
 
 
   return (
-    <div className="min-h-screen w-full bg-[#FAF8F5] flex items-center justify-center p-4 md:p-8">
-      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+    <div className="flex min-h-[calc(100svh-4rem)] w-full items-center justify-center bg-[#FAF8F5] px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+      <div className="grid w-full max-w-6xl grid-cols-1 items-center gap-8 xl:grid-cols-12 xl:gap-10">
         {/* ---------------------------- Left: Form --------------------------- */}
-        <div className="lg:col-span-6 px-4 sm:px-8 py-6">
+        <div className="mx-auto w-full max-w-md min-w-0 py-2 sm:py-6 xl:col-span-6 xl:max-w-none xl:px-8">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors mb-6 uppercase tracking-wider"
@@ -180,7 +180,7 @@ export default function RegisterPage() {
             <span className="text-xs font-bold uppercase tracking-wider text-[#E8612C]">
               Welcome to StudioSpace
             </span>
-            <h1 className="text-3xl font-extrabold text-foreground tracking-tight">
+            <h1 className="text-3xl font-extrabold text-foreground tracking-tight sm:text-4xl">
               Create your account.
             </h1>
             <p className="text-xs text-muted-foreground leading-relaxed">
@@ -331,7 +331,7 @@ export default function RegisterPage() {
         </div>
 
         {/* --------------------- Right: Image quote card --------------------- */}
-        <div className="lg:col-span-6 hidden lg:block">
+        <div className="hidden min-w-0 xl:col-span-6 xl:block">
           <div className="relative aspect-[4/5] w-full rounded-3xl overflow-hidden shadow-2xl bg-gray-900 border border-gray-100">
             <Image
               src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1200&auto=format&fit=crop"

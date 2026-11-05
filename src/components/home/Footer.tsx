@@ -51,7 +51,7 @@ export default function Footer() {
             </div>
             <div className="flex items-center gap-2">
               <Mail className="w-4 h-4 text-primary" />
-              <span>support@studiospace.com</span>
+              <span className="break-all">support@studiospace.com</span>
             </div>
           </div>
         </div>

@@ -74,26 +74,32 @@ export default async function DashboardPage() {
 
   const email = session.user.email;
   const token = await getServerToken();
-  const [studiosResponse, bookingsResponse] = await Promise.all([
-    fetch(apiUrl("/studios"), {
-      cache: "no-store",
-      headers: { Authorization: `Bearer ${token}` },
-    }),
-    fetch(apiUrl(`/bookings/${encodeURIComponent(email)}`), {
-      cache: "no-store",
-      headers: { Authorization: `Bearer ${token}` },
-    }),
-  ]);
+  if (!token) redirect("/sign-in?callbackURL=/dashboard");
 
-  if (!studiosResponse.ok) {
-    throw new Error(`The studios API returned ${studiosResponse.status}.`);
-  }
-  if (!bookingsResponse.ok) {
-    throw new Error(`The bookings API returned ${bookingsResponse.status}.`);
-  }
+  let allStudios: Studio[] = [];
+  let bookings: Booking[] = [];
 
-  const allStudios: Studio[] = await studiosResponse.json();
-  const bookings: Booking[] = await bookingsResponse.json();
+  try {
+    const [studiosResponse, bookingsResponse] = await Promise.all([
+      fetch(apiUrl("/studios"), {
+        cache: "no-store",
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+      fetch(apiUrl(`/bookings/${encodeURIComponent(email)}`), {
+        cache: "no-store",
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+    ]);
+
+    if (studiosResponse.ok) {
+      allStudios = await studiosResponse.json();
+    }
+    if (bookingsResponse.ok) {
+      bookings = await bookingsResponse.json();
+    }
+  } catch (err) {
+    console.error("Dashboard data fetch error:", err);
+  }
   const studios = allStudios.filter(
     (studio) => studio.ownerEmail?.toLowerCase() === email.toLowerCase(),
   );
@@ -262,17 +268,18 @@ export default async function DashboardPage() {
                 />
               </div>
             ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Studio</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Rate</TableHead>
-                  <TableHead>Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {recentBookings.map((booking) => (
+            <div className="w-full overflow-x-auto">
+              <Table className="min-w-[34rem]">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Studio</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Rate</TableHead>
+                    <TableHead>Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {recentBookings.map((booking) => (
                     <TableRow key={booking._id ?? booking.id ?? booking.title}>
                       <TableCell>
                         <p className="font-semibold text-[#25221F]">
@@ -301,9 +308,10 @@ export default async function DashboardPage() {
                         </Badge>
                       </TableCell>
                     </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
+                    ))}
+                </TableBody>
+              </Table>
+            </div>
             )}
           </Card>
         </section>

@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Calendar, Clock, DollarSign, CalendarDays } from "lucide-react";
@@ -9,6 +11,7 @@ import CancelBtn from "@/components/bookings/cancelBtn";
 import { apiUrl } from "@/lib/utils";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { getServerToken } from "@/lib/tokenServer";
+import { auth } from "@/lib/auth";
 
 // Route segment config: allow this segment to block during navigation
 // (booking details need session + API data; see Next.js `instant` docs).
@@ -47,21 +50,30 @@ const MyBookingPage = async ({
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
-  const token = await getServerToken();
-  const res = await fetch(apiUrl(`/bookings/${encodeURIComponent(id)}`), {
-    cache: "no-store",
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (!res.ok) {
-    const responseBody = await res.text();
-    throw new Error(
-      `The bookings service returned ${res.status}${responseBody ? `: ${responseBody}` : "."}`,
-    );
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) {
+    redirect(`/sign-in?callbackURL=/my-bookings/${encodeURIComponent(id)}`);
   }
 
-  const data: BookingItem[] = await res.json();
+  const token = await getServerToken();
+  if (!token) {
+    redirect(`/sign-in?callbackURL=/my-bookings/${encodeURIComponent(id)}`);
+  }
+
+  let data: BookingItem[] = [];
+  try {
+    const res = await fetch(apiUrl(`/bookings/${encodeURIComponent(id)}`), {
+      cache: "no-store",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) {
+      data = await res.json();
+    }
+  } catch (err) {
+    console.error("Failed to load bookings:", err);
+  }
   return (
-    <div className="min-h-screen bg-[#FAF8F5] p-6 font-sans">
+    <div className="min-h-screen bg-[#FAF8F5] p-3 font-sans sm:p-6">
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Page Header */}
         <div>
@@ -74,7 +86,7 @@ const MyBookingPage = async ({
         </div>
 
         {/* Filter Tabs Header Bar */}
-        <div className="flex items-center gap-2 border-b border-gray-200/60 pb-4">
+        <div className="flex flex-wrap items-center gap-2 border-b border-gray-200/60 pb-4">
           <button className="px-4 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-white shadow-sm">
             All ({data.length})
           </button>
@@ -134,7 +146,7 @@ const MyBookingPage = async ({
                   key={item._id}
                   className="rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <CardContent className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <CardContent className="flex min-w-0 flex-col gap-4 p-3 sm:p-5 md:flex-row md:items-center md:justify-between">
                     <div className="relative h-44 w-full shrink-0 overflow-hidden rounded-xl bg-gray-100 sm:h-32 md:h-24 md:w-36">
                       {item.imageUrl ? (
                         <Image
@@ -155,9 +167,9 @@ const MyBookingPage = async ({
                     </div>
 
                     {/* Left Side: Details */}
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <h3 className="text-base font-bold text-gray-900">
+                    <div className="min-w-0 space-y-3">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                        <h3 className="break-words text-base font-bold text-gray-900">
                           {item.title}
                         </h3>
 
@@ -192,7 +204,7 @@ const MyBookingPage = async ({
                       <div className="flex flex-wrap items-center gap-y-2 gap-x-3 text-xs text-gray-500 font-medium">
                         <div className="flex items-center gap-1">
                           <MapPin className="w-3.5 h-3.5 text-gray-400" />
-                          <span>{item.location}</span>
+                          <span className="break-words">{item.location}</span>
                         </div>
 
                         <div className="flex items-center gap-1.5 bg-[#FFF8F3] px-3 py-1 rounded-full text-[#E8612C]">

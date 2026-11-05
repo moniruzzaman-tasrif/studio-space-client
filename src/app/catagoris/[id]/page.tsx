@@ -17,19 +17,20 @@ async function CategoryStudios({
 }) {
   const { id } = await params;
   const category = decodeURIComponent(id);
-  const response = await fetch(apiUrl(`/category/${encodeURIComponent(id)}`), {
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to load studios (${response.status}).`);
+  let studios: DataType[] = [];
+  try {
+    const response = await fetch(apiUrl(`/category/${encodeURIComponent(id)}`), {
+      cache: "no-store",
+    });
+    if (response.ok) {
+      studios = await response.json();
+    }
+  } catch (err) {
+    console.error("Failed to load category studios:", err);
   }
 
-  const studios: DataType[] = await response.json();
-
-
   return (
-    <main className="min-h-screen bg-[#FAF8F5] px-6 py-10">
+    <main className="min-h-screen bg-[#FAF8F5] px-4 py-8 sm:px-6 sm:py-10">
       <div className="mx-auto max-w-7xl space-y-6">
         <h1 className="text-3xl font-serif font-bold text-gray-900">
           {category}
@@ -46,7 +47,7 @@ async function CategoryStudios({
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {studios.map(studio => (
-              <Link key={studio._id} href={`/explore/${studio._id}`}>
+              <Link key={studio._id} href={`/studios/${studio._id}`}>
                 <Card className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
                   <div className="relative aspect-[16/10] bg-gray-100">
                     {studio.imageUrl && (
@@ -88,7 +89,7 @@ export default function CadagoriDynamic({
   return (
     <Suspense
       fallback={
-        <main className="min-h-screen bg-background px-6 py-10">
+        <main className="min-h-screen bg-background px-4 py-8 sm:px-6 sm:py-10">
           <div className="mx-auto max-w-7xl space-y-6">
             <BrandedSpinner label="Loading studios..." />
             <StudioGridSkeleton />

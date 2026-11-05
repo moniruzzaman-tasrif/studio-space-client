@@ -7,15 +7,17 @@ import type { DataType } from "@/itemType";
 import { apiUrl } from "@/lib/utils";
 
 const FeaturedStudios = async () => {
-  const response = await fetch(apiUrl("/featured"), {
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to load featured studios (${response.status}).`);
+  let studios: DataType[] = [];
+  try {
+    const response = await fetch(apiUrl("/featured"), {
+      cache: "no-store",
+    });
+    if (response.ok) {
+      studios = await response.json();
+    }
+  } catch (err) {
+    console.error("Failed to load featured studios:", err);
   }
-
-  const studios: DataType[] = await response.json();
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-12 font-sans">

@@ -5,10 +5,10 @@ import { HOME_CATEGORY_CARDS } from "@/Data";
 
 export default function StudioCategories() {
   return (
-    <section className="py-12 px-6 max-w-7xl mx-auto font-sans">
-      <div className="flex justify-between items-end mb-8">
+    <section className="mx-auto max-w-7xl px-4 py-10 font-sans sm:px-6 sm:py-12">
+      <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:mb-8 sm:flex-row sm:items-end">
         <div>
-          <h2 className="text-3xl font-serif font-bold text-gray-900">
+          <h2 className="text-2xl font-serif font-bold text-gray-900 sm:text-3xl">
             Browse by category
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -17,7 +17,7 @@ export default function StudioCategories() {
         </div>
         <Link
           href="/studios"
-          className="text-sm font-semibold text-[#E8612C] hover:underline"
+          className="shrink-0 text-sm font-semibold text-[#E8612C] hover:underline"
         >
           View all &rarr;
         </Link>
