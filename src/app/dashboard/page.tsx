@@ -23,6 +23,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { auth } from "@/lib/auth";
+import { apiUrl } from "@/lib/utils";
 
 type Studio = {
   _id?: string;
@@ -67,8 +68,8 @@ export default async function DashboardPage() {
 
   const email = session.user.email;
   const [studiosResponse, bookingsResponse] = await Promise.all([
-    fetch("http://localhost:5000/studios", { cache: "no-store" }),
-    fetch(`http://localhost:5000/bookings/${ (email)}`, {
+    fetch(apiUrl("/studios"), { cache: "no-store" }),
+    fetch(apiUrl(`/bookings/${encodeURIComponent(email)}`), {
       cache: "no-store",
     }),
   ]);

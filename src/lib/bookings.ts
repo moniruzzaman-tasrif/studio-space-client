@@ -1,3 +1,5 @@
+import { apiUrl } from "@/lib/utils";
+
 export type BookingRecord = Record<string, unknown>;
 
 function isRecord(value: unknown): value is BookingRecord {
@@ -9,7 +11,7 @@ export async function loadBookingsForEmail(
 ): Promise<{ bookings: BookingRecord[]; error: string }> {
   try {
     const response = await fetch(
-      `http://localhost:5000/bookings/${encodeURIComponent(email)}`,
+      apiUrl(`/bookings/${encodeURIComponent(email)}`),
       { cache: "no-store" },
     );
 

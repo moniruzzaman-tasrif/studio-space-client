@@ -3,9 +3,10 @@ import { Suspense } from "react";
 import ExploreStudiosClient, {
   type StudioListing,
 } from "@/components/explore/ExploreStudiosClient";
+import { apiUrl } from "@/lib/utils";
 
 async function ExploreStudios() {
-  const response = await fetch("http://localhost:5000/studios", {
+  const response = await fetch(apiUrl("/studios"), {
     cache: "no-store",
   });
 

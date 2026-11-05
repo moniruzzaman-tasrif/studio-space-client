@@ -9,6 +9,7 @@ import { DataType } from "@/itemType";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { apiUrl } from "@/lib/utils";
 
 
 const BookingButton = ({ data }: { data: DataType }) => {
@@ -38,7 +39,7 @@ const DataTime={
 console.log(DataTime);
 
 
-    const res = await fetch("http://localhost:5000/bookings", {
+    const res = await fetch(apiUrl("/bookings"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

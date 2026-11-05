@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import type { DataType } from "@/itemType";
+import { apiUrl } from "@/lib/utils";
 
 export type StudioListing = DataType & {
   rating?: number;
@@ -82,7 +83,7 @@ export default function ExploreStudiosClient({
     setIsLoadingCategory(true);
     try {
       const response = await fetch(
-        `http://localhost:5000/category/${encodeURIComponent(category)}`,
+        apiUrl(`/category/${encodeURIComponent(category)}`),
       );
 
       if (!response.ok) {

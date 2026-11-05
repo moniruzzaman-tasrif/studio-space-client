@@ -4,9 +4,10 @@ import { ArrowRight, Heart, MapPin, Star } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import type { DataType } from "@/itemType";
+import { apiUrl } from "@/lib/utils";
 
 const FeaturedStudios = async () => {
-  const response = await fetch("http://localhost:5000/featured", {
+  const response = await fetch(apiUrl("/featured"), {
     cache: "no-store",
   });
 

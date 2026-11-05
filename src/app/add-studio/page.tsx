@@ -32,6 +32,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useSession } from "@/lib/auth-client";
+import { apiUrl } from "@/lib/utils";
 
 const categories = [
   { name: "Photo Studio", icon: Camera },
@@ -192,7 +193,7 @@ export default function AddStudioPage() {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch("http://localhost:5000/studios", {
+      const response = await fetch(apiUrl("/studios"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

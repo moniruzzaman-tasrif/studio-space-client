@@ -7,6 +7,7 @@ import { MapPin, Calendar, Clock, DollarSign } from "lucide-react";
 
 import ConfrimBtn from "@/components/bookings/ConfromBtn";
 import CancelBtn from "@/components/bookings/cancelBtn";
+import { apiUrl } from "@/lib/utils";
 
 // Interface matching your exact API response item
 interface BookingItem {
@@ -43,7 +44,7 @@ const MyBookingPage = async ({
   const { id } = await params;
   console.log(id);
 
-  const res = await fetch(`http://localhost:5000/bookings/${id}`, {
+  const res = await fetch(apiUrl(`/bookings/${encodeURIComponent(id)}`), {
     cache: "no-store",
   });
   if (res.status === 404) notFound();

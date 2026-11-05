@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,17 +16,26 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 
+const getCurrentYear = () => String(new Date().getFullYear());
+const getServerYear = () => "2026";
+
 export default function Footer() {
+  const currentYear = useSyncExternalStore(
+    () => () => {},
+    getCurrentYear,
+    getServerYear,
+  );
+
   return (
-    <footer className="bg-[#101C18] text-[#F4F1E8] font-sans pt-16 pb-8 border-t border-[#1D3028]">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-[#1D3028]">
+    <footer className="border-t border-border bg-background pt-16 pb-8 font-sans text-foreground">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 border-b border-border px-6 pb-12 md:grid-cols-2 lg:grid-cols-5">
         {/* 1. Brand & Mission Statement (Span 2 columns on large screens) */}
         <div className="lg:col-span-2 space-y-4">
           <Link
             href="/"
-            className="inline-block text-2xl font-serif font-bold tracking-tight text-white"
+            className="inline-block text-2xl font-serif font-bold tracking-tight text-foreground"
           >
-            Studio<span className="text-[#C47B55]">Space</span>
+            Studio            <span className="text-primary">Space</span>
           </Link>
           <p className="text-sm text-gray-400 max-w-sm leading-relaxed">
             Empowering creators, photographers, podcasters, and artists with
@@ -37,11 +46,11 @@ export default function Footer() {
           {/* Contact snippets */}
           <div className="space-y-2 pt-2 text-xs text-gray-400">
             <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-[#C47B55]" />
+              <MapPin className="w-4 h-4 text-primary" />
               <span>57 Grand Street, Brooklyn, NY</span>
             </div>
             <div className="flex items-center gap-2">
-              <Mail className="w-4 h-4 text-[#C47B55]" />
+              <Mail className="w-4 h-4 text-primary" />
               <span>support@studiospace.com</span>
             </div>
           </div>
@@ -49,19 +58,19 @@ export default function Footer() {
 
         {/* 2. Quick Navigation Links */}
         <div className="space-y-4">
-          <h4 className="text-sm font-bold uppercase tracking-wider text-white">
+          <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">
             Navigation
           </h4>
           <ul className="space-y-2.5 text-sm text-gray-400">
             <li>
-              <Link href="/" className="hover:text-[#C47B55] transition-colors">
+              <Link href="/" className="transition-colors hover:text-primary">
                 Home
               </Link>
             </li>
             <li>
               <Link
                 href="/explore"
-                className="hover:text-[#C47B55] transition-colors"
+                className="transition-colors hover:text-primary"
               >
                 Explore Studios
               </Link>
@@ -69,7 +78,7 @@ export default function Footer() {
             <li>
               <Link
                 href="/about"
-                className="hover:text-[#C47B55] transition-colors"
+                className="transition-colors hover:text-primary"
               >
                 About Us
               </Link>
@@ -77,7 +86,7 @@ export default function Footer() {
             <li>
               <Link
                 href="/contact"
-                className="hover:text-[#C47B55] transition-colors"
+                className="transition-colors hover:text-primary"
               >
                 Contact
               </Link>
@@ -87,14 +96,14 @@ export default function Footer() {
 
         {/* 3. Popular Studio Categories */}
         <div className="space-y-4">
-          <h4 className="text-sm font-bold uppercase tracking-wider text-white">
+          <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">
             Categories
           </h4>
           <ul className="space-y-2.5 text-sm text-gray-400">
             <li>
               <Link
                 href="/studios?category=Photo+Studios"
-                className="hover:text-[#C47B55] transition-colors"
+                className="transition-colors hover:text-primary"
               >
                 Photo Studios
               </Link>
@@ -102,7 +111,7 @@ export default function Footer() {
             <li>
               <Link
                 href="/studios?category=Sound+Stages"
-                className="hover:text-[#C47B55] transition-colors"
+                className="transition-colors hover:text-primary"
               >
                 Sound Stages
               </Link>
@@ -110,7 +119,7 @@ export default function Footer() {
             <li>
               <Link
                 href="/studios?category=Podcast+Rooms"
-                className="hover:text-[#C47B55] transition-colors"
+                className="transition-colors hover:text-primary"
               >
                 Podcast Rooms
               </Link>
@@ -118,7 +127,7 @@ export default function Footer() {
             <li>
               <Link
                 href="/studios?category=Music+Suites"
-                className="hover:text-[#C47B55] transition-colors"
+                className="transition-colors hover:text-primary"
               >
                 Music Suites
               </Link>
@@ -126,7 +135,7 @@ export default function Footer() {
             <li>
               <Link
                 href="/studios?category=Art+Workshops"
-                className="hover:text-[#C47B55] transition-colors"
+                className="transition-colors hover:text-primary"
               >
                 Art Workshops
               </Link>
@@ -136,7 +145,7 @@ export default function Footer() {
 
         {/* 4. Newsletter Signup */}
         <div className="space-y-4">
-          <h4 className="text-sm font-bold uppercase tracking-wider text-white">
+          <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">
             Stay Inspired
           </h4>
           <p className="text-xs text-gray-400">
@@ -147,12 +156,12 @@ export default function Footer() {
               <Input
                 type="email"
                 placeholder="Enter your email"
-                className="bg-[#1D3028] border-none text-white placeholder:text-gray-500 text-xs h-10 rounded-xl pr-10 focus-visible:ring-1 focus-visible:ring-[#C47B55]"
+                className="h-10 rounded-xl border border-border bg-card pr-10 text-xs text-foreground placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-primary"
               />
               <Button
                 type="submit"
                 size="icon"
-                className="absolute right-1 top-1 h-8 w-8 bg-[#C47B55] hover:bg-[#b06c4b] text-white rounded-lg"
+                className="absolute right-1 top-1 h-8 w-8 rounded-lg bg-primary text-primary-foreground hover:opacity-90"
               >
                 <ArrowRight className="w-4 h-4" />
               </Button>
@@ -166,7 +175,7 @@ export default function Footer() {
         {/* Copyright & Legal */}
         <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6 text-center sm:text-left">
           <p>
-            &copy; {new Date().getFullYear()} StudioSpace Inc. All rights
+            &copy; {currentYear} StudioSpace Inc. All rights
             reserved.
           </p>
           <div className="flex gap-4">
@@ -186,7 +195,7 @@ export default function Footer() {
             href="https://x.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-white transition-colors"
+            className="transition-colors hover:text-foreground"
             aria-label="X"
           >
             <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -198,7 +207,7 @@ export default function Footer() {
             href="https://instagram.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-white transition-colors"
+            className="transition-colors hover:text-foreground"
             aria-label="Instagram"
           >
             <FaInstagram className="w-4 h-4" />
@@ -208,7 +217,7 @@ export default function Footer() {
             href="https://linkedin.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-white transition-colors"
+            className="transition-colors hover:text-foreground"
             aria-label="LinkedIn"
           >
             <FaLinkedin className="w-4 h-4" />
@@ -218,7 +227,7 @@ export default function Footer() {
             href="https://facebook.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-white transition-colors"
+            className="transition-colors hover:text-foreground"
             aria-label="Facebook"
           >
             <FaFacebook className="w-4 h-4" />
@@ -228,7 +237,7 @@ export default function Footer() {
             href="https://youtube.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-white transition-colors"
+            className="transition-colors hover:text-foreground"
             aria-label="YouTube"
           >
             <FaYoutube className="w-4 h-4" />

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
+import { apiUrl } from "@/lib/utils";
 
 const CancelBtn = ({ statusData }: { statusData: string }) => {
   const router = useRouter();
@@ -12,7 +13,7 @@ const CancelBtn = ({ statusData }: { statusData: string }) => {
   const handleCancelBooking = async () => {
     setIsCancelling(true);
     try {
-      const res = await fetch(`http://localhost:5000/bookings/${statusData}`, {
+      const res = await fetch(apiUrl(`/bookings/${encodeURIComponent(statusData)}`), {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

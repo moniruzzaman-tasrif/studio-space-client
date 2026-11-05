@@ -31,8 +31,9 @@ import {
   EditStudioDialog,
   type EditableStudio,
 } from "@/components/studios/EditStudioDialog";
+import { apiUrl } from "@/lib/utils";
 
-const STUDIOS_API = "http://localhost:5000/studios";
+const STUDIOS_API = apiUrl("/studios");
 
 type ListingStatus = "active" | "draft" | "paused";
 

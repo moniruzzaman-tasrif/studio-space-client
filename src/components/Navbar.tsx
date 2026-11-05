@@ -8,6 +8,8 @@ import {
   LayoutDashboard,
   LogOut,
   PlusCircle,
+  Moon,
+  Sun,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -31,6 +33,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { signOut, useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/components/theme-provider";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -66,13 +69,13 @@ function NavigationLinks({ pathname }: { pathname: string | null }) {
                   navigationMenuTriggerStyle(),
                   "relative bg-transparent text-sm font-medium transition-colors hover:bg-transparent",
                   isActive
-                    ? "text-[#E8612C] hover:text-[#E8612C]"
+                    ? "text-[#F97316] hover:text-[#F97316]"
                     : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 {item.label}
                 {isActive && (
-                  <span className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-[#E8612C]" />
+                  <span className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-[#F97316]" />
                 )}
               </Link>
             </NavigationMenuItem>
@@ -90,6 +93,7 @@ function ActiveNavigationLinks() {
 
 export default function Navbar() {
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
   const { data, isPending } = useSession();
   const user = data?.user;
 
@@ -106,7 +110,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
       <div className="container mx-auto flex h-16 items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#E8612C] text-primary-foreground shadow-sm">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
             <LuBox className="h-5 w-5" />
           </span>
           <span className="text-lg font-bold tracking-tight text-foreground">
@@ -119,6 +123,20 @@ export default function Navbar() {
         </Suspense>
 
         <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-pressed={theme === "dark"}
+            title={`Switch to ${theme === "light" ? "Dark" : "Light"} Mode`}
+            aria-label={`Switch to ${theme === "light" ? "Dark" : "Light"} Mode`}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            {theme === "light" ? (
+              <Sun aria-hidden="true" className="h-4 w-4" />
+            ) : (
+              <Moon aria-hidden="true" className="h-4 w-4" />
+            )}
+          </button>
           {isPending ? (
             <div
               aria-hidden="true"
@@ -126,13 +144,13 @@ export default function Navbar() {
             />
           ) : user ? (
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex max-w-[190px] items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1.5 shadow-sm transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8612C]">
-                <Avatar className="h-8 w-8 shrink-0 border border-gray-200">
+              <DropdownMenuTrigger className="flex max-w-[190px] items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 shadow-sm transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                <Avatar className="h-8 w-8 shrink-0 border border-border">
                   <AvatarImage
                     src={user.image || ""}
                     alt={user.name || "User avatar"}
                   />
-                  <AvatarFallback className="bg-[#E8612C] text-xs font-bold tracking-wider text-white">
+                  <AvatarFallback className="bg-primary text-xs font-bold tracking-wider text-primary-foreground">
                     {getShortName(user.name)}
                   </AvatarFallback>
                 </Avatar>
@@ -173,8 +191,8 @@ export default function Navbar() {
                     onClick={() => router.push("/add-studio")}
                     className="cursor-pointer"
                   >
-                    <PlusCircle className="mr-2 h-4 w-4 text-[#E8612C]" />
-                    <span className="font-medium text-[#E8612C]">
+                    <PlusCircle className="mr-2 h-4 w-4 text-primary" />
+                    <span className="font-medium text-primary">
                       Add New Studio
                     </span>
                   </DropdownMenuItem>
@@ -211,13 +229,13 @@ export default function Navbar() {
             <>
               <Link
                 href="/sign-in"
-                className="inline-flex h-9 items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-gray-100 hover:text-accent-foreground"
+                className="inline-flex h-9 items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-accent-foreground"
               >
                 Log in
               </Link>
               <Link
                 href="/sign-up"
-                className="inline-flex h-9 items-center justify-center rounded-full bg-[#E8612C] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#d5521f]"
+                className="inline-flex h-9 items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
               >
                 Sign up
               </Link>

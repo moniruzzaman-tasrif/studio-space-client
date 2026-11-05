@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import BookingButton from "@/components/shared/BookingButton";
+import { apiUrl } from "@/lib/utils";
 
 const StudioDetails = async ({
   params,
@@ -25,7 +26,7 @@ const StudioDetails = async ({
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
-  const res = await fetch(`http://localhost:5000/studios/${id}`);
+  const res = await fetch(apiUrl(`/studios/${encodeURIComponent(id)}`));
   const data = await res.json();
   console.log(data);
 
