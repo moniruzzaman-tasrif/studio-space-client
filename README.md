@@ -5,8 +5,7 @@ workspaces. Photographers, filmmakers, podcasters, musicians, and other
 creators can explore studios, review their details, and submit booking
 requests. Hosts can publish and manage their studio listings.
 
-> **Live application:** A public client deployment URL has not been provided.
-> Add the production URL here when the client is deployed.
+> **Live application:** [https://studio-space-client-ashen.vercel.app](https://studio-space-client-ashen.vercel.app)
 
 ## Highlights
 
@@ -65,27 +64,6 @@ git clone https://github.com/moniruzzaman-tasrif/studio-space-client.git
 cd studio-space-client
 npm ci
 ```
-
-### Configure environment variables
-
-Create a `.env` file in the project root. Keep this file local; it is ignored by
-Git. Replace the example values with credentials and service URLs configured
-for your environment.
-
-```dotenv
-NEXT_PUBLIC_API_BASE_URL=https://studio-space-server-nine.vercel.app
-BETTER_AUTH_URL=http://localhost:3000
-BETTER_AUTH_SECRET=replace-with-a-long-random-secret
-MONGODB_URL=mongodb+srv://<username>:<password>@<cluster>/<database>
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-```
-
-`NEXT_PUBLIC_API_BASE_URL`, `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, and
-`MONGODB_URL` are used by the client/API integration and Better Auth setup.
-Google credentials are needed to enable Google OAuth. Configure the production
-values in the hosting provider's environment settings as well as locally.
-Never commit `.env` files, API keys, database URLs, or account passwords.
 
 ### Run locally
 
