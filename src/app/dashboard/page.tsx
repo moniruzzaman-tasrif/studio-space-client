@@ -25,6 +25,8 @@ import {
 import { auth } from "@/lib/auth";
 import { apiUrl } from "@/lib/utils";
 
+export const instant = false;
+
 type Studio = {
   _id?: string;
   id?: string;

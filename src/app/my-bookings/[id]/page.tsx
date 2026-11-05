@@ -9,6 +9,8 @@ import ConfrimBtn from "@/components/bookings/ConfromBtn";
 import CancelBtn from "@/components/bookings/cancelBtn";
 import { apiUrl } from "@/lib/utils";
 
+export const instant = false;
+
 // Interface matching your exact API response item
 interface BookingItem {
   _id: string;
