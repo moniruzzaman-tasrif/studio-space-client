@@ -14,36 +14,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";
-
-// Static Hero Content
-const heroContent = {
-  badge: "A SPACE FOR EVERY CREATIVE",
-  titlePrefix: "Find Your Space.",
-  titleHighlight: "Create Something Extraordinary.",
-  subtext:
-    "Book photography studios, sound stages, podcast rooms, and music suites by the hour — with transparent pricing and flexible schedules.",
-  footerText:
-    "Made for photographers, filmmakers, podcasters, musicians, and creative teams.",
-};
-
-// Images that slide
-const slideImages = [
-  {
-    id: 1,
-    url: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1200&auto=format&fit=crop",
-    alt: "Photography Studio Space",
-  },
-  {
-    id: 2,
-    url: "https://images.unsplash.com/photo-1598653222000-6b7b7a552625?q=80&w=1200&auto=format&fit=crop",
-    alt: "Sound Stage",
-  },
-  {
-    id: 3,
-    url: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop",
-    alt: "Music Studio Suite",
-  },
-];
+import { HERO_CONTENT, HERO_SLIDES } from "@/Data";
 
 export default function HeroSection() {
   const [api, setApi] = useState<CarouselApi>();
@@ -74,20 +45,20 @@ export default function HeroSection() {
               className="rounded-full bg-orange-100/60 border-orange-200 text-[#E8612C] text-xs font-semibold uppercase tracking-wider px-3.5 py-1.5 gap-2"
             >
               <span className="h-2 w-2 rounded-full bg-[#E8612C]" />
-              {heroContent.badge}
+              {HERO_CONTENT.badge}
             </Badge>
 
             {/* Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-[1.1]">
-              {heroContent.titlePrefix}{" "}
+              {HERO_CONTENT.titlePrefix}{" "}
               <span className="text-[#E8612C] block sm:inline">
-                {heroContent.titleHighlight}
+                {HERO_CONTENT.titleHighlight}
               </span>
             </h1>
 
             {/* Subtext */}
             <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
-              {heroContent.subtext}
+              {HERO_CONTENT.subtext}
             </p>
 
             {/* shadcn Button CTAs */}
@@ -111,7 +82,7 @@ export default function HeroSection() {
 
             {/* Footer Text */}
             <p className="text-xs text-muted-foreground pt-2">
-              {heroContent.footerText}
+              {HERO_CONTENT.footerText}
             </p>
           </div>
 
@@ -122,7 +93,7 @@ export default function HeroSection() {
               className="w-full max-w-[540px]"
             >
               <CarouselContent>
-                {slideImages.map(img => (
+                {HERO_SLIDES.map(img => (
                   <CarouselItem key={img.id}>
                     <div className="relative aspect-square w-full overflow-hidden rounded-3xl shadow-2xl border bg-muted">
                       <Image
@@ -141,7 +112,7 @@ export default function HeroSection() {
               <div className="flex items-center justify-between pt-4 px-2">
                 {/* Dots indicator */}
                 <div className="flex items-center gap-2">
-                  {slideImages.map((_, idx) => (
+                  {HERO_SLIDES.map((_, idx) => (
                     <button
                       key={idx}
                       onClick={() => api?.scrollTo(idx)}

@@ -2,133 +2,18 @@ import Link from "next/link";
 import {
   ArrowDown,
   ArrowRight,
-  BadgeCheck,
-  CalendarCheck,
-  CalendarDays,
   Check,
   CircleHelp,
-  ClipboardList,
   CreditCard,
-  DollarSign,
-  Headset,
   Search,
-  ShieldCheck,
   Sparkles,
-  Wrench,
 } from "lucide-react";
-
-const guestSteps = [
-  {
-    number: "01",
-    title: "Discover Spaces",
-    description:
-      "Browse studios by location, type, price, and amenities to find the right space.",
-    icon: Search,
-    points: ["Filter by city and category", "See real photos", "Compare amenities"],
-  },
-  {
-    number: "02",
-    title: "Select Shoot Hours",
-    description:
-      "Choose the date and hours that fit your production schedule.",
-    icon: CalendarDays,
-    points: ["Pick your date", "Choose your hours", "Review availability"],
-  },
-  {
-    number: "03",
-    title: "Book Instantly",
-    description:
-      "Review the booking details and total cost, then submit your reservation.",
-    icon: CalendarCheck,
-    points: ["Clear pricing", "Secure checkout", "Booking confirmation"],
-  },
-  {
-    number: "04",
-    title: "Create & Produce",
-    description:
-      "Arrive at your studio and bring your creative project to life.",
-    icon: Sparkles,
-    points: ["Professional equipment", "Host support", "Leave a review"],
-  },
-];
-
-const creatorAssurances = [
-  {
-    title: "Liability Protection",
-    description:
-      "Eligible bookings include liability protection. Review the booking terms for coverage details.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Verified Profiles",
-    description:
-      "Profile verification helps creators and hosts know who they are working with.",
-    icon: BadgeCheck,
-  },
-  {
-    title: "Equipment Safety",
-    description:
-      "Studio equipment details and host instructions help you plan a safe production.",
-    icon: Wrench,
-  },
-  {
-    title: "24/7 Host Support",
-    description:
-      "Reach out for help with your booking and studio questions whenever you need it.",
-    icon: Headset,
-  },
-];
-
-const hostSteps = [
-  {
-    title: "Create an Account",
-    description: "Sign up and tell us a little about yourself.",
-    icon: ClipboardList,
-  },
-  {
-    title: "Add Your Studio",
-    description: "Upload photos, set your price, and list your amenities.",
-    icon: Sparkles,
-  },
-  {
-    title: "Get Bookings",
-    description: "Review reservation requests and welcome new creators.",
-    icon: CalendarCheck,
-  },
-  {
-    title: "Get Paid",
-    description: "Earn from your space and grow your creative business.",
-    icon: DollarSign,
-  },
-];
-
-const questions = [
-  {
-    question: "How do I cancel a booking?",
-    answer:
-      "Open My Bookings and select Cancel Booking on a pending reservation. For confirmed bookings, contact the host to discuss your options.",
-  },
-  {
-    question: "Is my payment secure?",
-    answer:
-      "Your payment details are handled securely. The booking page displays the rate, service fee, and any security deposit before you submit a request.",
-  },
-  {
-    question: "How do I become a host?",
-    answer:
-      "Create an account, choose Add New Studio, and provide your studio details, photos, amenities, and pricing.",
-  },
-  {
-    question: "What if the studio doesn’t match the listing?",
-    answer:
-      "Contact your host as soon as possible. You can also reach out to StudioSpace support with your booking details.",
-  },
-  {
-    question: "How much does it cost to list a studio?",
-    answer:
-      "Creating a studio listing is free. Any fees associated with a reservation are shown before a guest submits a booking request.",
-  },
-];
+import {
+  CREATOR_ASSURANCES,
+  GUEST_STEPS,
+  HOST_STEPS,
+  HOW_IT_WORKS_QUESTIONS,
+} from "@/Data";
 
 export default function HowItWorksPage() {
   return (
@@ -157,7 +42,7 @@ export default function HowItWorksPage() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {guestSteps.map(({ number, title, description, icon: Icon, points }) => (
+          {GUEST_STEPS.map(({ number, title, description, icon: Icon, points }) => (
             <article
               key={number}
               className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
@@ -199,7 +84,7 @@ export default function HowItWorksPage() {
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {creatorAssurances.map(({ title, description, icon: Icon }) => (
+            {CREATOR_ASSURANCES.map(({ title, description, icon: Icon }) => (
               <article
                 key={title}
                 className="rounded-2xl border border-gray-100 bg-[#FAF8F5] p-5"
@@ -233,7 +118,7 @@ export default function HowItWorksPage() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {hostSteps.map(({ title, description, icon: Icon }) => (
+            {HOST_STEPS.map(({ title, description, icon: Icon }) => (
               <article
                 key={title}
                 className="rounded-2xl border border-white/5 bg-[#303030] p-5 text-center"
@@ -270,7 +155,7 @@ export default function HowItWorksPage() {
           </p>
         </div>
         <div className="space-y-2">
-          {questions.map(({ question, answer }, index) => (
+          {HOW_IT_WORKS_QUESTIONS.map(({ question, answer }, index) => (
             <details
               key={question}
               open={index === 0}

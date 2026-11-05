@@ -26,6 +26,7 @@ import { apiUrl } from "@/lib/utils";
 import { StudioGridSkeleton } from "@/components/shared/BrandedLoading";
 import { notifyError } from "@/lib/notifications";
 import { EmptyState } from "@/components/shared/EmptyState";
+import { CATEGORY_FILTERS } from "@/Data";
 
 export type StudioListing = DataType & {
   rating?: number;
@@ -34,16 +35,6 @@ export type StudioListing = DataType & {
   isSuperhost?: boolean;
   isFeatured?: boolean;
 };
-
-const CATEGORY_FILTERS = [
-  { label: "All Studios", value: "" },
-  { label: "Photography", value: "Photo Studio" },
-  { label: "Music", value: "Music Suite" },
-  { label: "Art", value: "Workshop" },
-  { label: "Dance", value: "Dance Studio" },
-  { label: "Podcast", value: "Podcast Lounge" },
-  { label: "Film", value: "Film Stage" },
-];
 
 export default function ExploreStudiosClient({
   studios,

@@ -1,47 +1,7 @@
 
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
-import { Camera, Film, Mic, Music, Palette, PersonStanding } from "lucide-react";
-
-// Define your categories matching your requirements
-const categories = [
-  {
-    name: "Photo Studios",
-    catItem: "Photo Studio",
-    icon: Camera,
-    count: "420 studios",
-  },
-  {
-    name: "Sound Stages",
-    catItem: "Film Stage",
-    icon: Film,
-    count: "156 studios",
-  },
-  {
-    name: "Podcast Rooms",
-    catItem: "Podcast Lounge",
-    icon: Mic,
-    count: "178 studios",
-  },
-  {
-    name: "Music Suites",
-    catItem: "Music Suite",
-    icon: Music,
-    count: "385 studios",
-  },
-  {
-    name: "Art Workshops",
-    catItem: "Art Space",
-    icon: Palette,
-    count: "290 studios",
-  },
-  {
-    name: "Dance",
-    catItem: "Dance Studio",
-    icon: PersonStanding,
-    count: "290 studios",
-  },
-];
+import { HOME_CATEGORY_CARDS } from "@/Data";
 
 export default function StudioCategories() {
   return (
@@ -65,7 +25,7 @@ export default function StudioCategories() {
 
       {/* Interactive Category Cards Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-        {categories.map(cat => {
+        {HOME_CATEGORY_CARDS.map(cat => {
           const IconComponent = cat.icon;
           return (
             <Link

@@ -41,6 +41,13 @@ The client uses the StudioSpace API at
 as `NEXT_PUBLIC_API_BASE_URL`. The API service is deployed independently from
 this repository.
 
+## Source Organization
+
+Shared static content and UI configuration live in [`src/Data`](./src/Data),
+with focused modules for studio categories and amenities, home-page content,
+navigation, listing filters, and the How It Works page. Import these exports
+where needed instead of duplicating section data inside components.
+
 ## Getting Started
 
 ### Prerequisites

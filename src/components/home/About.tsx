@@ -1,44 +1,10 @@
 import React from 'react';
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Globe2, Heart, ShieldCheck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
-
-const values = [
-  {
-    title: "Community First",
-    description:
-      "We build for creators. Every feature starts with what's best for our community.",
-    icon: Heart,
-  },
-  {
-    title: "Trust & Safety",
-    description:
-      "Every studio is verified in person. Every booking is protected. Every review is authentic.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Global Access",
-    description:
-      "We're expanding to every city so an inspiring studio is always within reach.",
-    icon: Globe2,
-  },
-];
-
-const stats = [
-  { value: "2,500+", label: "Verified Studios" },
-  { value: "12k+", label: "Active Creators" },
-  { value: "50+", label: "Cities Worldwide" },
-  { value: "98%", label: "Satisfaction Rate" },
-];
-
-const team = [
-  { initials: "AR", name: "Alex Rivera", role: "Co-Founder & CEO", color: "bg-[#E8612C]" },
-  { initials: "SK", name: "Sam Kim", role: "Co-Founder & COO", color: "bg-[#25221F]" },
-  { initials: "MP", name: "Maya Patel", role: "Head of Design", color: "bg-[#8A7865]" },
-  { initials: "JC", name: "Jordan Chen", role: "Head of Community", color: "bg-[#E88A63]" },
-];
+import { ABOUT_STATS, ABOUT_TEAM, ABOUT_VALUES } from "@/Data";
 
 const AboutPageHome = () => {
   return (
@@ -115,7 +81,7 @@ const AboutPageHome = () => {
             aria-label="Our core values"
             className="mt-12 grid gap-5 sm:mt-16 md:grid-cols-3 md:gap-6"
           >
-            {values.map(({ title, description, icon: Icon }) => (
+            {ABOUT_VALUES.map(({ title, description, icon: Icon }) => (
               <Card
                 key={title}
                 className="rounded-3xl border border-[#EEE8E1] bg-white py-0 shadow-sm transition-shadow duration-300 hover:shadow-lg"
@@ -146,7 +112,7 @@ const AboutPageHome = () => {
         className="bg-[#242424] px-5 py-8 sm:px-8"
       >
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 text-center sm:grid-cols-4">
-          {stats.map(({ value, label }) => (
+          {ABOUT_STATS.map(({ value, label }) => (
             <div key={label}>
               <p className="text-2xl font-extrabold text-[#E8612C] sm:text-3xl">
                 {value}
@@ -171,7 +137,7 @@ const AboutPageHome = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
-            {team.map(({ initials, name, role, color }) => (
+            {ABOUT_TEAM.map(({ initials, name, role, color }) => (
               <article key={name} className="text-center">
                 <div
                   aria-hidden="true"

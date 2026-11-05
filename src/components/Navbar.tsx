@@ -35,14 +35,7 @@ import { signOut, useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/theme-provider";
 import { notifyError, notifySuccess } from "@/lib/notifications";
-
-const navItems = [
-  { label: "Home", href: "/" },
-  { label: "Explore Studios ", href: "/studios" },
-  { label: "How it Work", href: "/How-It-Works" },
-  { label: "About", href: "/about" },
-  
-];
+import { NAV_ITEMS } from "@/Data";
 
 function getShortName(name?: string | null) {
   const parts = name?.trim().split(/\s+/).filter(Boolean);
@@ -57,7 +50,7 @@ function NavigationLinks({ pathname }: { pathname: string | null }) {
   return (
     <NavigationMenu>
       <NavigationMenuList className="gap-1">
-        {navItems.map((item) => {
+        {NAV_ITEMS.map((item) => {
           const isActive =
             pathname === item.href || pathname?.startsWith(`${item.href}/`);
 

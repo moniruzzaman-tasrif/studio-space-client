@@ -2,25 +2,12 @@
 
 import { useState, type FormEvent } from "react";
 import {
-  AirVent,
   Building2,
-  Camera,
-  Clapperboard,
-  CookingPot,
   DollarSign,
   ImagePlus,
   LoaderCircle,
   MapPin,
-  Mic,
-  Music2,
-  Palette,
-  ParkingCircle,
-  PersonStanding,
-  Sparkles,
-  Toilet,
-  Wifi,
 } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -39,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { apiUrl } from "@/lib/utils";
 import { getClientToken } from "@/lib/tokenClint";
+import { EDIT_STUDIO_AMENITIES, STUDIO_CATEGORIES } from "@/Data";
 
 export interface EditableStudio {
   id: string;
@@ -52,26 +40,6 @@ export interface EditableStudio {
   maxCapacity: number | null;
   amenities: string[];
 }
-
-const categories = [
-  { name: "Photo Studio", icon: Camera },
-  { name: "Music Suite", icon: Music2 },
-  { name: "Art Space", icon: Palette },
-  { name: "Dance Studio", icon: PersonStanding },
-  { name: "Podcast Lounge", icon: Mic },
-  { name: "Film Stage", icon: Clapperboard },
-] satisfies { name: string; icon: LucideIcon }[];
-
-const amenities = [
-  { name: "Wi-Fi", icon: Wifi },
-  { name: "Parking", icon: ParkingCircle },
-  { name: "Air Conditioning", icon: AirVent },
-  { name: "Natural Light", icon: Sparkles },
-  { name: "Kitchen", icon: CookingPot },
-  { name: "Restroom", icon: Toilet },
-  { name: "Soundproof", icon: Mic },
-  { name: "Lighting Equipment", icon: Camera },
-];
 
 type FieldErrors = Partial<
   Record<
@@ -137,7 +105,7 @@ export function EditStudioDialog({
     if (title.length < 3 || title.length > 100) {
       nextErrors.title = "Enter a studio name between 3 and 100 characters.";
     }
-    if (!categories.some((item) => item.name === category)) {
+    if (!STUDIO_CATEGORIES.some((item) => item.name === category)) {
       nextErrors.category = "Choose a studio category.";
     }
     if (description.length < 20 || description.length > 5000) {
@@ -270,7 +238,7 @@ export function EditStudioDialog({
                 <fieldset className="space-y-2">
                   <legend className="text-sm font-medium">Category</legend>
                   <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                    {categories.map(({ name, icon: Icon }) => (
+                    {STUDIO_CATEGORIES.map(({ name, icon: Icon }) => (
                       <button
                         key={name}
                         type="button"
@@ -402,7 +370,7 @@ export function EditStudioDialog({
                 <h3 className="text-sm font-bold uppercase">Amenities</h3>
               </CardHeader>
               <CardContent className="grid gap-2 pt-4 sm:grid-cols-2">
-                {amenities.map(({ name, icon: Icon }) => (
+                {EDIT_STUDIO_AMENITIES.map(({ name, icon: Icon }) => (
                   <label
                     key={name}
                     className="flex cursor-pointer items-center gap-2 rounded-xl border border-gray-200 bg-[#FAF8F5] px-3 py-2 text-sm"

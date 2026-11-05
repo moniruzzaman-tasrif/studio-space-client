@@ -29,6 +29,12 @@ import { cn } from "@/lib/utils";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { getClientToken } from "@/lib/tokenClint";
 import {
+  LISTING_FILTERS,
+  LISTING_STATUS_META,
+  type ListingFilter,
+  type ListingStatus,
+} from "@/Data";
+import {
   EditStudioDialog,
   type EditableStudio,
 } from "@/components/studios/EditStudioDialog";
@@ -36,35 +42,12 @@ import { apiUrl } from "@/lib/utils";
 
 const STUDIOS_API = apiUrl("/studios");
 
-type ListingStatus = "active" | "draft" | "paused";
-
 type StudioListing = EditableStudio & {
   rating: number;
   reviewCount: number;
   bookings: number;
   status: ListingStatus;
 };
-
-const STATUS_META: Record<
-  ListingStatus,
-  { label: string; className: string }
-> = {
-  active: {
-    label: "Active",
-    className: "border-emerald-100 bg-emerald-50 text-emerald-700",
-  },
-  draft: {
-    label: "Draft",
-    className: "border-amber-100 bg-amber-50 text-amber-700",
-  },
-  paused: {
-    label: "Paused",
-    className: "border-gray-200 bg-gray-100 text-gray-600",
-  },
-};
-
-const FILTERS = ["All", "Active", "Draft", "Paused"] as const;
-type Filter = (typeof FILTERS)[number];
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -167,7 +150,7 @@ export default function MyListingsPage() {
   const [listings, setListings] = useState<StudioListing[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [filter, setFilter] = useState<Filter>("All");
+  const [filter, setFilter] = useState<ListingFilter>("All");
   const [listingToEdit, setListingToEdit] =
     useState<StudioListing | null>(null);
   const [listingToDelete, setListingToDelete] =
@@ -334,7 +317,7 @@ export default function MyListingsPage() {
           aria-label="Filter listings by status"
           className="flex flex-wrap items-center gap-2"
         >
-          {FILTERS.map((item) => {
+          {LISTING_FILTERS.map((item) => {
             const isActive = filter === item;
             return (
               <button
@@ -443,7 +426,7 @@ export default function MyListingsPage() {
         ) : (
           <ul className="space-y-4">
             {visibleListings.map((listing, index) => {
-              const statusMeta = STATUS_META[listing.status];
+              const statusMeta = LISTING_STATUS_META[listing.status];
               return (
                 <li key={listing.id}>
                   <Card className="rounded-3xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-lg">

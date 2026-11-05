@@ -3,24 +3,14 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import {
-  AirVent,
   ArrowLeft,
   Building2,
-  Camera,
-  Check,
-  Clapperboard,
   DollarSign,
   ImagePlus,
   LoaderCircle,
   MapPin,
-  Mic,
-  Music2,
-  Palette,
-  ParkingCircle,
-  PersonStanding,
   Sparkles,
   UserRound,
-  Wifi,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -35,26 +25,7 @@ import { apiUrl } from "@/lib/utils";
 import { BrandedSpinner } from "@/components/shared/BrandedLoading";
 import { notifyError, notifyInfo, notifySuccess } from "@/lib/notifications";
 import { getClientToken } from "@/lib/tokenClint";
-
-const categories = [
-  { name: "Photo Studio", icon: Camera },
-  { name: "Music Suite", icon: Music2 },
-  { name: "Art Space", icon: Palette },
-  { name: "Dance Studio", icon: PersonStanding },
-  { name: "Podcast Lounge", icon: Mic },
-  { name: "Film Stage", icon: Clapperboard },
-] satisfies { name: string; icon: LucideIcon }[];
-
-const amenities = [
-  { name: "Wi-Fi", icon: Wifi },
-  { name: "Parking", icon: ParkingCircle },
-  { name: "Air Conditioning", icon: AirVent },
-  { name: "Natural Light", icon: Sparkles },
-  { name: "Kitchen", icon: Building2 },
-  { name: "Restroom", icon: Check },
-  { name: "Soundproof", icon: Mic },
-  { name: "Lighting Equipment", icon: Camera },
-];
+import { STUDIO_AMENITIES, STUDIO_CATEGORIES } from "@/Data";
 
 type FieldErrors = Partial<
   Record<
@@ -141,7 +112,7 @@ export default function AddStudioPage() {
     if (title.length < 3 || title.length > 100) {
       nextErrors.title = "Enter a studio name between 3 and 100 characters.";
     }
-    if (!categories.some((item) => item.name === selectedCategory)) {
+    if (!STUDIO_CATEGORIES.some((item) => item.name === selectedCategory)) {
       nextErrors.category = "Choose a studio category.";
     }
     if (description.length < 20 || description.length > 5000) {
@@ -308,7 +279,7 @@ export default function AddStudioPage() {
                 </legend>
                 <input type="hidden" name="category" value={category} />
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                  {categories.map(({ name, icon: Icon }) => {
+                  {STUDIO_CATEGORIES.map(({ name, icon: Icon }) => {
                     const isSelected = category === name;
                     return (
                       <button
@@ -453,7 +424,7 @@ export default function AddStudioPage() {
           <Card className="rounded-3xl border border-gray-200 bg-white shadow-sm">
             <SectionHeading icon={Sparkles} title="Amenities" />
             <CardContent className="grid grid-cols-1 gap-3 px-5 pb-6 pt-5 sm:grid-cols-2 sm:px-7 sm:pb-7">
-              {amenities.map(({ name, icon: Icon }) => (
+              {STUDIO_AMENITIES.map(({ name, icon: Icon }) => (
                 <label
                   key={name}
                   className="flex cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-[#FAF8F5] px-4 py-3 text-sm transition-colors hover:border-orange-200"
