@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { signIn } from "@/lib/auth-client";
+import { getSafeCallbackURL } from "@/lib/auth-redirect";
 import GoogleButton from "@/components/shared/Googlebutton";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 
@@ -70,10 +71,13 @@ export default function SignInPage() {
 
     setIsLoading(true);
     try {
+      const callbackURL = getSafeCallbackURL(
+        new URLSearchParams(window.location.search).get("callbackURL"),
+      );
       const { error } = await signIn.email({
         email: data.email,
         password: data.password,
-        callbackURL: "/",
+        callbackURL,
       });
 
       if (error) {
@@ -85,7 +89,7 @@ export default function SignInPage() {
       }
 
       notifySuccess("Login successful!", "Welcome back!");
-      router.push("/");
+      router.push(callbackURL);
       router.refresh();
     } catch (error) {
       notifyError(

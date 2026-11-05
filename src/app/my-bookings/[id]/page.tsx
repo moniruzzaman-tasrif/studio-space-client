@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Calendar, Clock, DollarSign, CalendarDays } from "lucide-react";
@@ -11,6 +10,8 @@ import { apiUrl } from "@/lib/utils";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { getServerToken } from "@/lib/tokenServer";
 
+// Route segment config: allow this segment to block during navigation
+// (booking details need session + API data; see Next.js `instant` docs).
 export const instant = false;
 
 // Interface matching your exact API response item
@@ -47,18 +48,18 @@ const MyBookingPage = async ({
 }) => {
   const { id } = await params;
   const token = await getServerToken();
-
   const res = await fetch(apiUrl(`/bookings/${encodeURIComponent(id)}`), {
     cache: "no-store",
     headers: { Authorization: `Bearer ${token}` },
   });
-  if (res.status === 404) notFound();
   if (!res.ok) {
-    throw new Error(`The bookings service returned ${res.status}.`);
+    const responseBody = await res.text();
+    throw new Error(
+      `The bookings service returned ${res.status}${responseBody ? `: ${responseBody}` : "."}`,
+    );
   }
 
   const data: BookingItem[] = await res.json();
-
   return (
     <div className="min-h-screen bg-[#FAF8F5] p-6 font-sans">
       <div className="max-w-5xl mx-auto space-y-6">

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
@@ -18,16 +18,27 @@ import { HERO_CONTENT, HERO_SLIDES } from "@/Data";
 
 export default function HeroSection() {
   const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
 
-  useEffect(() => {
-    if (!api) return;
+  // Embla is an external store: subscribe to its events and read the selected
+  // snap during render instead of calling setState inside an effect.
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      if (!api) return () => {};
+      const handler = () => onChange();
+      const events = ["init", "select", "reInit"] as const;
+      for (const event of events) api.on(event, handler);
+      return () => {
+        for (const event of events) api.off(event, handler);
+      };
+    },
+    [api],
+  );
 
-    setCurrent(api.selectedScrollSnap());
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
-    });
-  }, [api]);
+  const current = useSyncExternalStore(
+    subscribe,
+    () => (api ? api.selectedScrollSnap() : 0),
+    () => 0,
+  );
 
   return (
     <section className="relative w-full bg-[#FAF8F5] overflow-hidden py-12 md:py-20">
@@ -100,6 +111,7 @@ export default function HeroSection() {
                         src={img.url}
                         alt={img.alt}
                         fill
+                        sizes="(max-width: 1024px) 100vw, 540px"
                         priority={img.id === 1}
                         className="object-cover"
                       />

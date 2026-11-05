@@ -38,14 +38,18 @@ export type StudioListing = DataType & {
 
 export default function ExploreStudiosClient({
   studios,
+  initialCategory = "",
+  initialStudios,
 }: {
   studios: StudioListing[];
+  initialCategory?: string;
+  initialStudios?: StudioListing[];
 }) {
-  const [shownStudios, setShownStudios] = useState(studios);
+  const [shownStudios, setShownStudios] = useState(initialStudios ?? studios);
   const [searchQuery, setSearchQuery] = useState("");
   const [favorites, setFavorites] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [loadingCategory, setLoadingCategory] = useState<string | null>(null);
 
   const normalizedSearch = searchQuery.trim().toLowerCase();

@@ -35,6 +35,7 @@ export function EmptyState({
       {actionHref ? (
         <Button
           render={<Link href={actionHref} />}
+          nativeButton={false}
           className="mt-5 h-10 rounded-full bg-primary px-5 font-semibold text-primary-foreground hover:opacity-90"
         >
           {actionLabel}

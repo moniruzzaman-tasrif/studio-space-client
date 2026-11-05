@@ -337,6 +337,7 @@ export default function RegisterPage() {
               src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1200&auto=format&fit=crop"
               alt="Photographer working in a StudioSpace studio"
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               priority
               className="object-cover opacity-85"
             />

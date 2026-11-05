@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/auth-client";
+import { getSafeCallbackURL } from "@/lib/auth-redirect";
 import { notifyError } from "@/lib/notifications";
 
 const GoogleButton = () => {
@@ -15,9 +16,12 @@ const GoogleButton = () => {
     setIsGoogleLoading(true);
 
     try {
+      const callbackURL = getSafeCallbackURL(
+        new URLSearchParams(window.location.search).get("callbackURL"),
+      );
       const result = await signIn.social({
         provider: "google",
-        callbackURL: "/",
+        callbackURL,
         errorCallbackURL: "/sign-in",
       });
 

@@ -24,7 +24,7 @@ import { useSession } from "@/lib/auth-client";
 import { apiUrl } from "@/lib/utils";
 import { BrandedSpinner } from "@/components/shared/BrandedLoading";
 import { notifyError, notifyInfo, notifySuccess } from "@/lib/notifications";
-import { getClientToken } from "@/lib/tokenClint";
+import { getClientToken } from "@/lib/tokenClient";
 import { STUDIO_AMENITIES, STUDIO_CATEGORIES } from "@/Data";
 
 type FieldErrors = Partial<

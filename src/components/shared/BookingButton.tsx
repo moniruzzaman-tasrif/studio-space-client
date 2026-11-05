@@ -9,7 +9,7 @@ import { DataType } from "@/itemType";
 import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/lib/utils";
-import { getClientToken } from "@/lib/tokenClint";
+import { getClientToken } from "@/lib/tokenClient";
 import { useState } from "react";
 import { notifyError, notifyInfo, notifySuccess } from "@/lib/notifications";
 
@@ -20,7 +20,7 @@ const BookingButton = ({ data }: { data: DataType }) => {
 const user = session?.user;
 const [isBooking, setIsBooking] = useState(false);
 
-const { title, category, location, imageUrl,hourlyRate } = data;
+const { title, category, location, imageUrl, hourlyRate } = data;
 
 
 
@@ -33,11 +33,11 @@ const { title, category, location, imageUrl,hourlyRate } = data;
       return;
     }
 
+    const formData = new FormData(e.currentTarget);
+    const bookingData = Object.fromEntries(formData.entries());
     setIsBooking(true);
     try {
       const token = await getClientToken();
-      const formData = new FormData(e.currentTarget);
-      const bookingData = Object.fromEntries(formData.entries());
       const date = new Date();
       const dataTime = {
         date: date.toDateString(),
@@ -51,6 +51,7 @@ const { title, category, location, imageUrl,hourlyRate } = data;
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          studioId: data._id,
           userName: user.name,
           userEmail: user.email,
           bookingData,
@@ -63,10 +64,14 @@ const { title, category, location, imageUrl,hourlyRate } = data;
           status: "Pending",
         }),
       });
+
+      const resData: { success?: boolean; message?: string } =
+        await res.json();
       if (!res.ok) {
-        throw new Error(`Booking request failed (${res.status}).`);
+        throw new Error(
+          resData.message || `Booking request failed (${res.status}).`,
+        );
       }
-      const resData = await res.json();
 
       if (resData.success) {
         notifySuccess(resData.message || "Booking request submitted.");
@@ -127,7 +132,7 @@ const { title, category, location, imageUrl,hourlyRate } = data;
                     id="bookingDate"
                     name="bookingDate"
                     type="date"
-                    defaultValue="2026-11-15"
+                    required
                     className="h-7 text-xs p-1 font-semibold border-none shadow-none focus-visible:ring-0"
                   />
                 </div>
@@ -161,6 +166,7 @@ const { title, category, location, imageUrl,hourlyRate } = data;
                     name="startTime"
                     type="time"
                     defaultValue="10:00"
+                    required
                     className="h-7 text-xs p-1 font-semibold border-none shadow-none focus-visible:ring-0"
                   />
                 </div>
@@ -177,6 +183,7 @@ const { title, category, location, imageUrl,hourlyRate } = data;
                     name="endTime"
                     type="time"
                     defaultValue="14:00"
+                    required
                     className="h-7 text-xs p-1 font-semibold border-none shadow-none focus-visible:ring-0"
                   />
                 </div>

@@ -5,7 +5,7 @@ import { LoaderCircle } from "lucide-react";
 import { Button } from '../ui/button';
 import { apiUrl } from "@/lib/utils";
 import { notifyError, notifySuccess } from "@/lib/notifications";
-import { getClientToken } from "@/lib/tokenClint";
+import { getClientToken } from "@/lib/tokenClient";
 
 
 const ConfrimBtn =  ({ statusData }: { statusData:string}) => {

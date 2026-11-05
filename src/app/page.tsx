@@ -4,7 +4,6 @@ import StudioCategories from "@/components/home/Categories";
 import FeaturedStudios from "@/components/home/FeaturedStudios";
 import HeroSlider from "@/components/home/Hero";
 import AboutPageHome from "@/components/home/About";
-import Footer from "@/components/home/Footer";
 import { BrandedSpinner, StudioGridSkeleton } from "@/components/shared/BrandedLoading";
 
 export default function Home() {

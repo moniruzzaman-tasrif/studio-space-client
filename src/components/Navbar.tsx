@@ -149,10 +149,12 @@ export default function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger className="flex max-w-[190px] items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 shadow-sm transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                 <Avatar className="h-8 w-8 shrink-0 border border-border">
-                  <AvatarImage
-                    src={user.image || ""}
-                    alt={user.name || "User avatar"}
-                  />
+                  {user.image ? (
+                    <AvatarImage
+                      src={user.image}
+                      alt={user.name || "User avatar"}
+                    />
+                  ) : null}
                   <AvatarFallback className="bg-primary text-xs font-bold tracking-wider text-primary-foreground">
                     {getShortName(user.name)}
                   </AvatarFallback>

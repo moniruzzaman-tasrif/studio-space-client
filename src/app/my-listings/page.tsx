@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { notifyError, notifySuccess } from "@/lib/notifications";
-import { getClientToken } from "@/lib/tokenClint";
+import { getClientToken } from "@/lib/tokenClient";
 import {
   LISTING_FILTERS,
   LISTING_STATUS_META,
@@ -304,6 +304,7 @@ export default function MyListingsPage() {
 
           <Button
             render={<Link href="/add-studio" />}
+            nativeButton={false}
             className="h-11 w-full gap-2 rounded-full bg-[#E8612C] px-5 font-semibold text-white shadow-sm hover:bg-[#d5521f] sm:w-auto"
           >
             <Plus className="h-4 w-4" />
@@ -406,6 +407,7 @@ export default function MyListingsPage() {
             {listings.length === 0 && (
               <Button
                 render={<Link href="/add-studio" />}
+                nativeButton={false}
                 className="mt-5 h-10 gap-2 rounded-full bg-[#E8612C] px-5 font-semibold text-white hover:bg-[#d5521f]"
               >
                 <Plus className="h-4 w-4" />

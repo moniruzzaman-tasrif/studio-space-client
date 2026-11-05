@@ -27,6 +27,8 @@ import { apiUrl } from "@/lib/utils";
 import { getServerToken } from "@/lib/tokenServer";
 import { EmptyState } from "@/components/shared/EmptyState";
 
+// Route segment config: allow this segment to block during navigation
+// (dashboard needs session + API data; see Next.js `instant` docs).
 export const instant = false;
 
 type Studio = {
@@ -141,6 +143,7 @@ export default async function DashboardPage() {
           </div>
           <Button
             render={<Link href="/add-studio" />}
+            nativeButton={false}
             className="h-11 gap-2 rounded-full bg-[#E8612C] px-5 font-semibold text-white shadow-sm hover:bg-[#d5521f]"
           >
             <Plus className="h-4 w-4" />
@@ -199,6 +202,7 @@ export default async function DashboardPage() {
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <Button
               render={<Link href="/add-studio" />}
+              nativeButton={false}
               variant="outline"
               className="h-12 justify-start gap-3 rounded-xl border-gray-200 bg-white"
             >
@@ -208,6 +212,7 @@ export default async function DashboardPage() {
             </Button>
             <Button
               render={<Link href="/my-listings" />}
+              nativeButton={false}
               variant="outline"
               className="h-12 justify-start gap-3 rounded-xl border-gray-200 bg-white"
             >
@@ -217,6 +222,7 @@ export default async function DashboardPage() {
             </Button>
             <Button
               render={<Link href={`/my-bookings/${encodeURIComponent(email)}`} />}
+              nativeButton={false}
               variant="outline"
               className="h-12 justify-start gap-3 rounded-xl border-gray-200 bg-white"
             >

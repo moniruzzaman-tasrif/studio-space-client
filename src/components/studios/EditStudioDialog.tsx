@@ -25,7 +25,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { apiUrl } from "@/lib/utils";
-import { getClientToken } from "@/lib/tokenClint";
+import { getClientToken } from "@/lib/tokenClient";
 import { EDIT_STUDIO_AMENITIES, STUDIO_CATEGORIES } from "@/Data";
 
 export interface EditableStudio {

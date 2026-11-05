@@ -1,6 +1,4 @@
-// path to your Better Auth server instance
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -15,7 +13,6 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import BookingButton from "@/components/shared/BookingButton";
 import { apiUrl } from "@/lib/utils";
@@ -27,22 +24,33 @@ const StudioDetails = async ({
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
-  const res = await fetch(apiUrl(`/studios/${encodeURIComponent(id)}`));
+  const res = await fetch(apiUrl(`/studios/${encodeURIComponent(id)}`), {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    notFound();
+  }
+
   const data = await res.json();
-  console.log(data);
 
   // Fallbacks mapped directly from your API data structure
   const title = data.title || data.name || "Studio Workspace";
   const category = data.category || data.selectedCategory || "Music Suite";
   const location = data.location || "Location unavailable";
   const address = data.address || location;
-  const hourlyRate = data.hourlyRate || data.pricePerHour || 560;
-  const mainImage =
-    data.imageUrl 
-  const gallery =
-    data.gallery && data.gallery.length > 0
-      ? data.gallery
-      : [mainImage, mainImage, mainImage, mainImage];
+  const mainImage = typeof data.imageUrl === "string" ? data.imageUrl : "";
+  const gallery: string[] = Array.isArray(data.gallery)
+    ? data.gallery.filter(
+        (img: unknown): img is string => typeof img === "string" && img !== "",
+      )
+    : [];
+  const imageGallery =
+    gallery.length > 0
+      ? gallery
+      : mainImage
+      ? [mainImage, mainImage, mainImage, mainImage]
+      : [];
   const description =
     data.description ||
     "A gorgeous creative studio space equipped with state-of-the-art facilities.";
@@ -61,7 +69,7 @@ const StudioDetails = async ({
             Home
           </Link>
           <span>/</span>
-          <Link href="/explore" className="hover:underline">
+          <Link href="/studios" className="hover:underline">
             Studios
           </Link>
           <span>/</span>
@@ -73,38 +81,54 @@ const StudioDetails = async ({
         {/* Gallery Grid Showcase */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 rounded-3xl overflow-hidden">
           {/* Main Cover Image */}
-          <div className="md:col-span-2 relative aspect-[16/10] md:aspect-auto md:h-[420px] bg-gray-200">
-            <Image
-              src={mainImage}
-              alt={title}
-              fill
-              className="object-cover"
-              priority
-            />
+          <div
+            className={`relative aspect-[16/10] md:aspect-auto md:h-[420px] bg-gray-200 ${
+              imageGallery.length > 0 ? "md:col-span-2" : "md:col-span-3"
+            }`}
+          >
+            {mainImage ? (
+              <Image
+                src={mainImage}
+                alt={title}
+                fill
+                sizes="(max-width: 768px) 100vw, 66vw"
+                className="object-cover"
+                priority
+              />
+            ) : (
+              <div
+                role="img"
+                aria-label={`${title} image unavailable`}
+                className="h-full w-full bg-gradient-to-br from-orange-100 to-stone-200"
+              />
+            )}
           </div>
 
           {/* Secondary Gallery Grid */}
-          <div className="grid grid-cols-2 gap-4 h-[420px] hidden md:grid">
-            {gallery.slice(0, 4).map((imgUrl: string, idx: number) => (
-              <div
-                key={idx}
-                className="relative bg-gray-200 rounded-2xl overflow-hidden"
-              >
-                <Image
-                  src={imgUrl}
-                  alt={`${title} gallery photo ${idx + 1}`}
-                  fill
-                  className="object-cover hover:scale-105 transition-transform duration-300"
-                />
-                {idx === 3 && (
-                  <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center text-white text-xs font-bold gap-1">
-                    <Sparkles className="w-4 h-4" />
-                    <span>+12 photos</span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+          {imageGallery.length > 0 && (
+            <div className="grid grid-cols-2 gap-4 h-[420px] hidden md:grid">
+              {imageGallery.slice(0, 4).map((imgUrl: string, idx: number) => (
+                <div
+                  key={idx}
+                  className="relative bg-gray-200 rounded-2xl overflow-hidden"
+                >
+                  <Image
+                    src={imgUrl}
+                    alt={`${title} gallery photo ${idx + 1}`}
+                    fill
+                    sizes="(max-width: 1024px) 25vw, 17vw"
+                    className="object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                  {idx === 3 && (
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center text-white text-xs font-bold gap-1">
+                      <Sparkles className="w-4 h-4" />
+                      <span>+12 photos</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Main Content Details & Booking Section */}

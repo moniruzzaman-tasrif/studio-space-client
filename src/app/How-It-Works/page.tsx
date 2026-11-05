@@ -180,7 +180,7 @@ export default function HowItWorksPage() {
         </p>
         <div className="mt-5 flex flex-wrap justify-center gap-3">
           <Link
-            href="/explore"
+            href="/studios"
             className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-xs font-bold text-[#E8612C] hover:bg-orange-50"
           >
             Find a Studio <Search className="h-3.5 w-3.5" />

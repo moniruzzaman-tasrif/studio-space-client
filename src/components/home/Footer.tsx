@@ -69,7 +69,7 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/explore"
+                href="/studios"
                 className="transition-colors hover:text-primary"
               >
                 Explore Studios
@@ -102,7 +102,7 @@ export default function Footer() {
           <ul className="space-y-2.5 text-sm text-gray-400">
             <li>
               <Link
-                href="/studios?category=Photo+Studios"
+                href="/studios?category=Photo+Studio"
                 className="transition-colors hover:text-primary"
               >
                 Photo Studios
@@ -110,7 +110,7 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/studios?category=Sound+Stages"
+                href="/studios?category=Film+Stage"
                 className="transition-colors hover:text-primary"
               >
                 Sound Stages
@@ -118,7 +118,7 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/studios?category=Podcast+Rooms"
+                href="/studios?category=Podcast+Lounge"
                 className="transition-colors hover:text-primary"
               >
                 Podcast Rooms
@@ -126,7 +126,7 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/studios?category=Music+Suites"
+                href="/studios?category=Music+Suite"
                 className="transition-colors hover:text-primary"
               >
                 Music Suites
@@ -134,7 +134,7 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/studios?category=Art+Workshops"
+                href="/studios?category=Workshop"
                 className="transition-colors hover:text-primary"
               >
                 Art Workshops

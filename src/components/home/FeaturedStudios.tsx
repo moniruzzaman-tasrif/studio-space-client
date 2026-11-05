@@ -29,7 +29,7 @@ const FeaturedStudios = async () => {
           </p>
         </div>
         <Link
-          href="/explore"
+          href="/studios"
           className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-[#E8612C] hover:underline"
         >
           See all studios <ArrowRight className="h-3.5 w-3.5" />
