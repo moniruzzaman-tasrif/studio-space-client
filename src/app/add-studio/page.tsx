@@ -93,20 +93,14 @@ export default function AddStudioPage() {
     const title = String(formData.get("title") ?? "").trim();
     const selectedCategory = String(formData.get("category") ?? "");
     const description = String(formData.get("description") ?? "").trim();
-    const hourlyRateValue = String(formData.get("hourlyRate") ?? "");
-    const securityDepositValue = String(formData.get("securityDeposit") ?? "");
-    const maxCapacityValue = String(formData.get("maxCapacity") ?? "");
+    const hourlyRate = Number(formData.get("hourlyRate"));
+    const securityDeposit = Number(formData.get("securityDeposit") || 0);
+    const maxCapacity = Number(formData.get("maxCapacity"));
     const location = String(formData.get("location") ?? "").trim();
     const imageUrl = String(formData.get("imageUrl") ?? "").trim();
     const selectedAmenities = formData
-
       .getAll("amenities")
       .filter((value): value is string => typeof value === "string");
-    const hourlyRate = Number(hourlyRateValue);
-    const securityDeposit = securityDepositValue
-      ? Number(securityDepositValue)
-      : 0;
-    const maxCapacity = Number(maxCapacityValue);
 
     const nextErrors: FieldErrors = {};
     if (title.length < 3 || title.length > 100) {
@@ -119,12 +113,7 @@ export default function AddStudioPage() {
       nextErrors.description =
         "Enter an overview between 20 and 5,000 characters.";
     }
-    if (
-      !hourlyRateValue ||
-      !Number.isFinite(hourlyRate) ||
-      hourlyRate <= 0 ||
-      hourlyRate > 100_000
-    ) {
+    if (!Number.isFinite(hourlyRate) || hourlyRate <= 0 || hourlyRate > 100_000) {
       nextErrors.hourlyRate = "Enter a valid hourly rate.";
     }
     if (
@@ -134,26 +123,19 @@ export default function AddStudioPage() {
     ) {
       nextErrors.securityDeposit = "Enter a valid non-negative deposit.";
     }
-    if (
-      !maxCapacityValue ||
-      !Number.isInteger(maxCapacity) ||
-      maxCapacity < 1 ||
-      maxCapacity > 1000
-    ) {
+    if (!Number.isInteger(maxCapacity) || maxCapacity < 1 || maxCapacity > 1000) {
       nextErrors.maxCapacity = "Enter a capacity from 1 to 1,000.";
     }
     if (location.length < 3 || location.length > 300) {
       nextErrors.location = "Enter a location between 3 and 300 characters.";
     }
 
-    let parsedImageUrl: URL | undefined;
     try {
-      parsedImageUrl = new URL(imageUrl);
+      if (new URL(imageUrl).protocol !== "https:") {
+        nextErrors.imageUrl = "The cover image URL must use HTTPS.";
+      }
     } catch {
       nextErrors.imageUrl = "Enter a valid HTTPS image URL.";
-    }
-    if (parsedImageUrl && parsedImageUrl.protocol !== "https:") {
-      nextErrors.imageUrl = "The cover image URL must use HTTPS.";
     }
 
     setErrors(nextErrors);
